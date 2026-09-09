@@ -25,6 +25,7 @@ No incluye todavía (pendiente de módulo de Contabilidad): asientos contables d
         'security/rrhh_security_groups.xml',
         'security/ir.model.access.csv',
         'security/security_rules.xml',
+        'data/menu.xml',
         'data/hr_department_job_data.xml',
         'data/exchange_rate_cron.xml',
         'views/res_company_views.xml',

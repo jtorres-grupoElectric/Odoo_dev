@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Menú raíz de RRHH Custom.
+
+        Se define en su propio archivo y se carga (según __manifest__.py)
+        antes que cualquier archivo de views/, para que todos los <menuitem>
+        que hacen parent="menu_rrhh_custom_root" resuelvan el ID también en
+        una instalación desde cero (no solo en actualizaciones donde el menú
+        ya existe en la base).
+    -->
+    <menuitem id="menu_rrhh_custom_root"
+        name="RRHH"
+        sequence="10"/>
+</odoo>
