@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_payroll_payslip_list" model="ir.ui.view">
+        <field name="name">payroll.payslip.list</field>
+        <field name="model">payroll.payslip</field>
+        <field name="arch" type="xml">
+            <list string="Planillas Mensuales">
+                <field name="display_name" string="Periodo" decoration-bf="1" />
+                <field name="company_id" groups="base.group_multi_company" optional="show" />
+                <field name="total_net" widget="monetary" optional="show" />
+                <field name="total_net_usd" optional="show" />
+                <field name="state" widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'calculated'"
+                    decoration-success="state == 'approved'" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_payroll_payslip_form" model="ir.ui.view">
+        <field name="name">payroll.payslip.form</field>
+        <field name="model">payroll.payslip</field>
+        <field name="arch" type="xml">
+            <form string="Planilla Mensual">
+                <header>
+                    <button string="Guardar" special="save" class="oe_highlight" />
+                    <button name="action_cancel_draft" string="Cancelar" type="object"
+                        invisible="state != 'draft'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista"
+                        confirm="¿Anular esta planilla en borrador? Se eliminará por completo y no se podrá recuperar." />
+                    <button name="action_calculate" string="Pasar a Observación" type="object"
+                        class="oe_highlight" invisible="state != 'draft'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_recalculate_days" string="Recalcular días" type="object"
+                        invisible="state != 'draft'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista"
+                        help="Vuelve a ajustar 'Días trabajados' de cada línea contra las incapacidades aprobadas del periodo. Útil si un permiso de incapacidad se aprobó después de generar esta planilla." />
+                    <button name="action_approve" string="Aprobar" type="object"
+                        class="oe_highlight" invisible="state != 'calculated'"
+                        groups="odoo_rrhh_custom.group_rrhh_socio" />
+                    <button name="action_reset_to_draft" string="Volver a borrador" type="object"
+                        invisible="state not in ('calculated', 'approved')"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,calculated,approved" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"
+                                readonly="state != 'draft'" />
+                            <field name="period_start" readonly="state != 'draft'" />
+                            <field name="period_end" readonly="state != 'draft'" />
+                            <field name="currency_id" invisible="1" />
+                        </group>
+                        <group>
+                            <field name="prepared_by_id" readonly="1" />
+                            <field name="approved_by_id" readonly="1" />
+                            <field name="total_to_pay" widget="monetary" readonly="1" />
+                            <field name="total_deductions" widget="monetary" readonly="1" />
+                            <field name="total_net" widget="monetary" readonly="1" />
+                            <field name="total_net_usd" readonly="1" />
+                        </group>
+                    </group>
+                    <group string="Tasa de cambio del periodo">
+                        <group>
+                            <field name="exchange_rate_date" readonly="state != 'draft'" />
+                        </group>
+                        <group>
+                            <field name="exchange_rate_resolved_date" readonly="1" />
+                            <field name="exchange_rate_value" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Empleados">
+                            <field name="line_ids" readonly="state == 'approved'">
+                                <list editable="bottom" limit="10" class="o_rrhh_payroll_line_list">
+                                    <field name="employee_id" widget="many2one_avatar_employee" />
+                                    <field name="currency_id" column_invisible="1" />
+                                    <field name="base_salary_usd" string="Salario $" readonly="1"
+                                        optional="show" />
+                                    <field name="base_salary" string="Salario L." widget="monetary"
+                                        readonly="1" />
+                                    <field name="days_worked" />
+                                    <field name="incapacity_unpaid_days" string="Días de incapacidad"
+                                        readonly="1" optional="hide" />
+                                    <field name="salary_to_pay" widget="monetary" readonly="1"
+                                        column_invisible="1" />
+                                    <field name="bonus" widget="monetary" optional="hide" />
+                                    <!-- <field name="per_diem" widget="monetary"/> -->
+                                    <field name="retroactive" widget="monetary" optional="hide" />
+                                    <field name="incapacity_to_pay" widget="monetary" readonly="1"
+                                        optional="hide" />
+                                    <field name="incapacity_ihss_pay" widget="monetary" readonly="1"
+                                        optional="hide" />
+                                    <field name="holiday_worked_days" readonly="1" optional="hide" />
+                                    <field name="holiday_extra_pay" widget="monetary" readonly="1"
+                                        optional="hide" />
+                                    <field name="vacation_days_taken" string="Vacaciones"
+                                        readonly="1" optional="hide" />
+                                    <field name="overtime_hours_diurna" readonly="1" optional="show" />
+                                    <field name="overtime_hours_mixta" readonly="1" optional="show" />
+                                    <field name="overtime_hours_nocturna" readonly="1"
+                                        optional="show" />
+                                    <field name="overtime_hours_prolongacion" readonly="1"
+                                        optional="show" />
+                                    <field name="overtime_hours_feriado" readonly="1"
+                                        optional="show" />
+                                    <field name="overtime_hours" string="H.E. total" readonly="1"
+                                        optional="hide" />
+                                    <field name="overtime_amount" widget="monetary" readonly="1"
+                                        optional="show" />
+                                    <field name="total_to_pay" widget="monetary" readonly="1" />
+                                    <field name="cooperative_deduction" widget="monetary" />
+                                    <field name="municipal_tax" widget="monetary" optional="hide" />
+                                    <field name="isr" widget="monetary" optional="hide" />
+                                    <field name="ihss_deduction" widget="monetary" readonly="1" />
+                                    <field name="rap_deduction" widget="monetary" readonly="1" />
+                                    <field name="total_deductions" widget="monetary" readonly="1" />
+                                    <field name="net_to_pay" widget="monetary" readonly="1" />
+                                    <field name="pays_in_usd" column_invisible="1" />
+                                    <field name="net_to_pay_usd" string="Neto en $" readonly="1" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+
+    <record id="view_payroll_payslip_search" model="ir.ui.view">
+        <field name="name">payroll.payslip.search</field>
+        <field name="model">payroll.payslip</field>
+        <field name="arch" type="xml">
+            <search string="Buscar planillas">
+                <field name="period_start" />
+                <filter string="Borrador" name="state_draft" domain="[('state', '=', 'draft')]" />
+                <filter string="Pendientes de aprobación" name="state_calculated"
+                    domain="[('state', '=', 'calculated')]" />
+                <group expand="0" string="Agrupar por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}" />
+                    <filter string="Empresa" name="group_company"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_payroll_payslip" model="ir.actions.act_window">
+        <field name="name">Planillas</field>
+        <field name="res_model">payroll.payslip</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_payroll_payslip_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea la primera planilla mensual</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_payroll_payslip" name="Planillas"
+        parent="menu_rrhh_custom_root" action="action_payroll_payslip" sequence="45"
+        groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio" />
+
+</odoo>

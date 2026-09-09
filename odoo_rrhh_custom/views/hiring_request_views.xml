@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hiring_request_list" model="ir.ui.view">
+        <field name="name">hiring.request.list</field>
+        <field name="model">hiring.request</field>
+        <field name="arch" type="xml">
+            <list string="Solicitudes de Contratación" class="o_rrhh_hiring_request_list"
+                  decoration-muted="state == 'cancelled'">
+                <field name="job_profile_id" decoration-bf="1"/>
+                <field name="department_id" optional="show"/>
+                <field name="quantity" string="Plazas" optional="show"/>
+                <field name="requester_id" widget="many2one_avatar_employee" optional="show"/>
+                <field name="request_date" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'pending_approval'"
+                       decoration-success="state in ('approved', 'contracted')"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_hiring_request_search" model="ir.ui.view">
+        <field name="name">hiring.request.search</field>
+        <field name="model">hiring.request</field>
+        <field name="arch" type="xml">
+            <search string="Buscar solicitudes de contratación">
+                <field name="job_profile_id"/>
+                <field name="department_id"/>
+                <field name="requester_id"/>
+                <filter string="Mis solicitudes" name="my_requests"
+                        domain="[('requester_id.user_id', '=', uid)]"/>
+                <filter string="Pendientes de mi aprobación" name="pending_approval"
+                        domain="[('state', '=', 'pending_approval')]"/>
+                <filter string="En búsqueda" name="in_search" domain="[('state', '=', 'in_search')]"/>
+                <separator/>
+                <filter string="Activas" name="active_requests"
+                        domain="[('state', 'not in', ('contracted', 'cancelled'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Departamento" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Empresa" name="group_company" context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hiring_request_form" model="ir.ui.view">
+        <field name="name">hiring.request.form</field>
+        <field name="model">hiring.request</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de Contratación">
+                <header>
+                    <button name="action_submit" string="Enviar a aprobación" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Aprobar" type="object"
+                            class="oe_highlight" invisible="state != 'pending_approval'"
+                            groups="odoo_rrhh_custom.group_rrhh_socio"/>
+                    <button name="action_start_search" string="Iniciar búsqueda" type="object"
+                            class="oe_highlight" invisible="state != 'approved'"
+                            groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+                    <!-- La solicitud pasa a "Contratada" automáticamente al contratar
+                         el primer candidato (hiring.candidate.action_mark_contracted). -->
+                    <button name="action_cancel" string="Anular solicitud" type="object"
+                            invisible="state in ('draft', 'contracted', 'cancelled')"/>
+                    <button name="action_reset_to_draft" string="Volver a borrador" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,pending_approval,approved,in_search,contracted"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="department_id" readonly="state != 'draft'"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="job_profile_id" readonly="state != 'draft'"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="quantity" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="requester_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="approver_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                            <field name="approval_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Notas">
+                        <field name="notes" nolabel="1" readonly="state != 'draft'"/>
+                    </group>
+                    <notebook>
+                        <page string="Candidatos"
+                              invisible="state in ('draft', 'pending_approval', 'approved')">
+                            <field name="candidate_ids" invisible="state == 'contracted'">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="agency_id"/>
+                                    <field name="score"/>
+                                    <field name="interview_date"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'proposed'"
+                                           decoration-warning="state in ('filtered', 'interviewed')"
+                                           decoration-success="state in ('approved', 'contracted', 'finalized')"
+                                           decoration-danger="state == 'rejected'"/>
+                                </list>
+                            </field>
+                            <!-- Con la solicitud ya "Contratada" no se agregan ni borran más
+                                 candidatos; los existentes siguen abriéndose para finalizar su perfil. -->
+                            <field name="candidate_ids" invisible="state != 'contracted'">
+                                <list create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="agency_id"/>
+                                    <field name="score"/>
+                                    <field name="interview_date"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'proposed'"
+                                           decoration-warning="state in ('filtered', 'interviewed')"
+                                           decoration-success="state in ('approved', 'contracted', 'finalized')"
+                                           decoration-danger="state == 'rejected'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hiring_request" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Contratación</field>
+        <field name="res_model">hiring.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hiring_request_search"/>
+        <field name="context">{'search_default_active_requests': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea la primera solicitud de contratación</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_rrhh_custom_root" name="RRHH" sequence="10"/>
+    <menuitem id="menu_hiring_request" name="Solicitud de Contratación"
+              parent="menu_rrhh_custom_root" action="action_hiring_request" sequence="10"
+              groups="odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_especialista"/>
+
+</odoo>

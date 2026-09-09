@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Oculta "Registrar una nota" en los modelos donde solo se necesita
+         "Enviar mensaje" para notificar (candidatos y permisos laborales). -->
+    <t t-name="mail.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o-mail-Chatter-logNote')]" position="attributes">
+            <attribute name="t-if">!['hiring.candidate', 'labor.permission', 'employee.overtime'].includes(props.threadModel)</attribute>
+        </xpath>
+    </t>
+
+</templates>

@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    container_name: rrhh_prod_db
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rrhh_prod_web
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - ./odoo_rrhh_custom:/mnt/extra-addons/odoo_rrhh_custom
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  odoo_data:

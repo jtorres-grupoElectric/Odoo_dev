@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_company_form_rrhh_payroll" model="ir.ui.view">
+        <field name="name">res.company.form.rrhh.payroll</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Planilla (RRHH)" name="rrhh_payroll">
+                    <group>
+                        <group string="IHSS">
+                            <field name="payroll_applies_ihss"/>
+                            <field name="payroll_ihss_fixed_quota" widget="monetary"
+                                   invisible="not payroll_applies_ihss"/>
+                        </group>
+                        <group string="RAP">
+                            <field name="payroll_applies_rap"/>
+                            <field name="payroll_rap_ceiling" widget="monetary"
+                                   invisible="not payroll_applies_rap"/>
+                            <field name="payroll_rap_percentage"
+                                   invisible="not payroll_applies_rap"/>
+                        </group>
+                        <group string="Recargos de horas extra por jornada (%)">
+                            <field name="payroll_ot_pct_diurna"/>
+                            <field name="payroll_ot_pct_mixta"/>
+                            <field name="payroll_ot_pct_nocturna"/>
+                            <field name="payroll_ot_pct_prolongacion"/>
+                            <field name="payroll_ot_pct_feriado"/>
+                        </group>
+                        <group string="Jornada ordinaria (clasificación de horas extra)">
+                            <field name="payroll_ordinary_start" widget="float_time"/>
+                            <field name="payroll_ordinary_end" widget="float_time"/>
+                            <field name="payroll_saturday_end" widget="float_time"/>
+                        </group>
+                        <group string="Bandas horarias de horas extra">
+                            <field name="payroll_ot_mixta_from" widget="float_time"/>
+                            <field name="payroll_ot_nocturna_from" widget="float_time"/>
+                            <field name="payroll_ot_prolongacion_from" widget="float_time"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

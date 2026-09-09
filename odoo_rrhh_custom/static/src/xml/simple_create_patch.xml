@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- En el formulario de estos 5 modelos del módulo RRHH (creando un
+         registro nuevo o viendo uno ya existente) el botón "Nuevo" del
+         control panel se reemplaza por uno de "Atrás" que regresa a la
+         lista del módulo — desde el formulario no hace falta abrir otro
+         registro en blanco encima del que ya se está viendo/editando, y
+         "Atrás" es más claro que depender del breadcrumb. Antes de salir,
+         "Atrás" intenta guardar si hay cambios sin guardar (igual que hace
+         el botón "Nuevo" original antes de abrir un registro en blanco) —
+         de lo contrario, salir con datos sin guardar los perdía en
+         silencio, sin ningún aviso. Si el guardado falla por validación,
+         no navega y deja ver el error, igual que "Guardar". Además,
+         mientras se crea un registro nuevo, los íconos de nube/x se
+         cambian por botones con texto "Guardar"/"Cancelar", más claros
+         para el usuario. En cualquier otro modelo el comportamiento
+         estándar de Odoo no cambia. -->
+
+    <t t-name="web.FormView" t-inherit="web.FormView" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_form_button_create') and hasclass('btn-outline-primary')]" position="replace">
+            <button type="button" class="btn btn-outline-primary o_form_button_create"
+                    t-if="canCreate and !['hiring.request', 'payroll.payslip', 'employee.salary', 'employee.overtime', 'labor.permission'].includes(model.root.resModel)"
+                    data-hotkey="c" t-on-click.stop="create">New</button>
+            <button type="button" class="btn btn-outline-secondary o_form_button_back"
+                    t-if="['hiring.request', 'payroll.payslip', 'employee.salary', 'employee.overtime', 'labor.permission'].includes(model.root.resModel)"
+                    t-on-click="() => this.model.root.isDirty().then((dirty) => (dirty ? this.model.root.save({ onError: this.onSaveError.bind(this) }) : true)).then((canProceed) => canProceed &amp;&amp; this.env.config.historyBack())">
+                <i class="fa fa-arrow-left me-1"/>Atrás
+            </button>
+        </xpath>
+    </t>
+
+    <t t-name="web.FormStatusIndicator" t-inherit="web.FormStatusIndicator" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_form_status_indicator_buttons')]" position="replace">
+            <div class="o_form_status_indicator_buttons d-flex" t-att-class="{ invisible: !(props.model.root.isNew or displayButtons) }"
+                 t-if="!(props.model.root.isNew and ['hiring.request', 'payroll.payslip', 'employee.salary', 'employee.overtime', 'labor.permission'].includes(props.model.root.resModel))">
+                <button
+                    type="button"
+                    class="o_form_button_save btn btn-light border-0 px-1 py-0 lh-sm"
+                    data-hotkey="s"
+                    t-on-click.stop="save"
+                    data-tooltip="Save manually"
+                    aria-label="Save manually"
+                    t-ref="save">
+                    <i class="fa fa-cloud-upload fa-fw" />
+                </button>
+                <button
+                    type="button"
+                    class="o_form_button_cancel btn btn-light border-0 px-1 py-0 lh-sm"
+                    data-hotkey="j"
+                    t-on-click.stop="discard"
+                    data-tooltip="Discard all changes"
+                    aria-label="Discard all changes">
+                    <i class="fa fa-times fa-fw" />
+                </button>
+            </div>
+            <div class="o_form_status_indicator_buttons d-flex gap-1" t-att-class="{ invisible: !(props.model.root.isNew or displayButtons) }"
+                 t-if="props.model.root.isNew and ['hiring.request', 'payroll.payslip', 'employee.salary', 'employee.overtime', 'labor.permission'].includes(props.model.root.resModel)">
+                <button
+                    type="button"
+                    class="o_form_button_save btn btn-primary btn-sm"
+                    data-hotkey="s"
+                    t-on-click.stop="save"
+                    data-tooltip="Guardar"
+                    aria-label="Guardar"
+                    t-ref="save">
+                    Guardar
+                </button>
+                <button
+                    type="button"
+                    class="o_form_button_cancel btn btn-secondary btn-sm"
+                    data-hotkey="j"
+                    t-on-click.stop="discard"
+                    data-tooltip="Cancelar"
+                    aria-label="Cancelar">
+                    Cancelar
+                </button>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

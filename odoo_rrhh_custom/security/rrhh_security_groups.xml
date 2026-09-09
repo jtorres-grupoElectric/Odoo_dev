@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="module_category_rrhh_custom" model="ir.module.category">
+        <field name="name">RRHH Custom</field>
+        <field name="description">Roles del módulo custom de Recursos Humanos</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Empleado: solicitar permisos; ver estado de sus propias solicitudes -->
+    <record id="group_rrhh_empleado" model="res.groups">
+        <field name="name">Empleado</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+    </record>
+
+    <!-- Jefe de Departamento: crear solicitud de contratación; aprobar candidatos;
+         aprobar/rechazar permisos de sus empleados.
+         Nota: NO hereda Empleado a propósito. La regla de registro de
+         labor.permission que limita "solo ver las propias" está condicionada
+         a group_rrhh_empleado, y si este grupo la heredara quedaría igual de
+         restringido que un Empleado normal, perdiendo visibilidad de los
+         permisos de su equipo. Los accesos que sí necesita se otorgan de
+         forma independiente en ir.model.access.csv. -->
+    <record id="group_rrhh_jefe_departamento" model="res.groups">
+        <field name="name">Jefe de Departamento</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+    </record>
+
+    <!-- Especialista RRHH: gestión completa (candidatos, agencias, empleados,
+         salario individual, documentos); visibilidad total del flujo.
+         Tampoco hereda Empleado, por la misma razón que Jefe de Departamento. -->
+    <record id="group_rrhh_especialista" model="res.groups">
+        <field name="name">Especialista RRHH</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+    </record>
+
+    <!-- Dueño / Socio: aprobar solicitudes de contratación -->
+    <record id="group_rrhh_socio" model="res.groups">
+        <field name="name">Dueño / Socio</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+    </record>
+
+</odoo>

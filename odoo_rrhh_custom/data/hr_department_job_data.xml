@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Departamentos consolidados a partir de "Perfiles de Puestos 25.02.2026".
+         company_id vacío a proposito (eval="False"): sin esto Odoo aplica su default
+         (empresa activa al cargar los datos) y quedan atados a una sola empresa. -->
+    <record id="dept_direccion_general" model="hr.department">
+        <field name="name">Dirección General</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_operaciones" model="hr.department">
+        <field name="name">Operaciones</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_finanzas" model="hr.department">
+        <field name="name">Finanzas y Contabilidad</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_ingenieria" model="hr.department">
+        <field name="name">Ingeniería</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_proyectos_epc" model="hr.department">
+        <field name="name">Proyectos / EPC y Construcción</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_comercial" model="hr.department">
+        <field name="name">Comercial y Desarrollo de Negocios</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_compras_logistica" model="hr.department">
+        <field name="name">Compras y Logística</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_administracion" model="hr.department">
+        <field name="name">Administración</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_rrhh" model="hr.department">
+        <field name="name">Recursos Humanos</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_tecnologia" model="hr.department">
+        <field name="name">Tecnología / TI</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_legal" model="hr.department">
+        <field name="name">Legal y Cumplimiento</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_calidad_ssma" model="hr.department">
+        <field name="name">Calidad, Seguridad y Medio Ambiente</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="dept_servicios_generales" model="hr.department">
+        <field name="name">Servicios Generales</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Puestos (hr.job) del catálogo de 105 perfiles de puesto. -->
+    <record id="job_d_ceo" model="hr.job">
+        <field name="name">Chief Executive Officer (CEO)</field>
+        <field name="department_id" ref="dept_direccion_general"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_coo" model="hr.job">
+        <field name="name">Chief Operating Officer (COO)</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_cfo" model="hr.job">
+        <field name="name">Chief Financial Officer (CFO)</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_cto" model="hr.job">
+        <field name="name">Chief Technical Officer (CTO)</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_com" model="hr.job">
+        <field name="name">Chief Commercial Officer (CCO)</field>
+        <field name="department_id" ref="dept_comercial"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gaf" model="hr.job">
+        <field name="name">Gerente Administrativo Financiero</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gad" model="hr.job">
+        <field name="name">Gerente Administrativo</field>
+        <field name="department_id" ref="dept_administracion"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gfi" model="hr.job">
+        <field name="name">Gerente Financiero</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_grh" model="hr.job">
+        <field name="name">Gerente de Recursos Humanos</field>
+        <field name="department_id" ref="dept_rrhh"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gin" model="hr.job">
+        <field name="name">Gerente de Ingeniería / Head de Ingeniería</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gpr" model="hr.job">
+        <field name="name">Gerente de Proyectos / PM</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gom" model="hr.job">
+        <field name="name">Gerente de Operación y Mantenimiento</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gpc" model="hr.job">
+        <field name="name">Gerente de Compras / Procura</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_d_gcm" model="hr.job">
+        <field name="name">Gerente Comercial</field>
+        <field name="department_id" ref="dept_comercial"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_smg" model="hr.job">
+        <field name="name">Site Manager</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_ait" model="hr.job">
+        <field name="name">Coodinador de TI</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cad" model="hr.job">
+        <field name="name">Coordinador Administrativo</field>
+        <field name="department_id" ref="dept_administracion"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cmc" model="hr.job">
+        <field name="name">Coordinador Comercial</field>
+        <field name="department_id" ref="dept_comercial"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cqa" model="hr.job">
+        <field name="name">Coordinador de Calidad (QA/QC)</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cca" model="hr.job">
+        <field name="name">Coordinador de Compras</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cin" model="hr.job">
+        <field name="name">Coordinador de Ingeniería</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_log" model="hr.job">
+        <field name="name">Coordinador de Logística</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cme" model="hr.job">
+        <field name="name">Coordinador de Montaje</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_com" model="hr.job">
+        <field name="name">Coordinador de O&amp;M</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cpt" model="hr.job">
+        <field name="name">Coordinador de Propuestas / Licitaciones</field>
+        <field name="department_id" ref="dept_comercial"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cpr" model="hr.job">
+        <field name="name">Coordinador de Proyecto</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cmn" model="hr.job">
+        <field name="name">Coordinador de Puesta en Marcha</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_crh" model="hr.job">
+        <field name="name">Coordinador de Recursos Humanos</field>
+        <field name="department_id" ref="dept_rrhh"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_cfi" model="hr.job">
+        <field name="name">Coordinador Financiero</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_css" model="hr.job">
+        <field name="name">Coordinador SSMA</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_sqa" model="hr.job">
+        <field name="name">Supervisor de Calidad (QA/QC)</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_see" model="hr.job">
+        <field name="name">Supervisor Eléctrico</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_g_sme" model="hr.job">
+        <field name="name">Supervisor Mecánico</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_aad" model="hr.job">
+        <field name="name">Analista Administrativo</field>
+        <field name="department_id" ref="dept_administracion"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_com" model="hr.job">
+        <field name="name">Analista de Compras</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cmt" model="hr.job">
+        <field name="name">Analista de Compras Técnicas</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_ani" model="hr.job">
+        <field name="name">Analista de Costos / Planeamiento</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cxc" model="hr.job">
+        <field name="name">Analista de Cuentas por Cobrar</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cxp" model="hr.job">
+        <field name="name">Analista de Cuentas por Pagar</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_pub" model="hr.job">
+        <field name="name">Analista de Propuestas / Bidding</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_anh" model="hr.job">
+        <field name="name">Analista de Recursos Humanos</field>
+        <field name="department_id" ref="dept_rrhh"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_tes" model="hr.job">
+        <field name="name">Analista de Tesorería</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_anf" model="hr.job">
+        <field name="name">Analista Financiero / Presupuestario</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_log" model="hr.job">
+        <field name="name">Analista Logístico</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_tic" model="hr.job">
+        <field name="name">Analista TI</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_leg" model="hr.job">
+        <field name="name">Asesor Legal</field>
+        <field name="department_id" ref="dept_legal"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_aux" model="hr.job">
+        <field name="name">Auditor Interno</field>
+        <field name="department_id" ref="dept_legal"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cad" model="hr.job">
+        <field name="name">Cadista / Diseñador CAD</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cpa" model="hr.job">
+        <field name="name">Contador de Proyectos</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_cnt" model="hr.job">
+        <field name="name">Contador General</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_doc" model="hr.job">
+        <field name="name">Document Controller</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_ejc" model="hr.job">
+        <field name="name">Ejecutivo de Cuentas</field>
+        <field name="department_id" ref="dept_comercial"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_esc" model="hr.job">
+        <field name="name">Especialista en SCADA / Comunicaciones</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_iec" model="hr.job">
+        <field name="name">Ingeniero Civil</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_iqa" model="hr.job">
+        <field name="name">Ingeniero de QA/QC</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_iee" model="hr.job">
+        <field name="name">Ingeniero Electricista / Energía</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_imc" model="hr.job">
+        <field name="name">Ingeniero Mecánico</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_imt" model="hr.job">
+        <field name="name">Ingeniero Mecatrónico</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_iom" model="hr.job">
+        <field name="name">Ingeniero O&amp;M</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_iss" model="hr.job">
+        <field name="name">Ingeniero SSMA</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_pmi" model="hr.job">
+        <field name="name">Planificador de Proyecto (Scheduler)</field>
+        <field name="department_id" ref="dept_ingenieria"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_p_pro" model="hr.job">
+        <field name="name">Programador / Desarrollador de Sistemas</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_opp" model="hr.job">
+        <field name="name">Operador de Equipo Pesado</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_civ" model="hr.job">
+        <field name="name">Técnico Civil</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_alm" model="hr.job">
+        <field name="name">Técnico de Almacén</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_qac" model="hr.job">
+        <field name="name">Técnico de Control de Calidad</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_mnt" model="hr.job">
+        <field name="name">Técnico de Mantenimiento</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_etr" model="hr.job">
+        <field name="name">Técnico de Obras Civiles / Terraplenes</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_pnt" model="hr.job">
+        <field name="name">Técnico de Puesta en Marcha</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_elm" model="hr.job">
+        <field name="name">Técnico Electricista de Montaje</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_scd" model="hr.job">
+        <field name="name">Técnico en SCADA / Comunicaciones</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_sst" model="hr.job">
+        <field name="name">Técnico en Seguridad</field>
+        <field name="department_id" ref="dept_calidad_ssma"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_mdl" model="hr.job">
+        <field name="name">Técnico Mecánico de Montaje</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_adm" model="hr.job">
+        <field name="name">Asistente Administrativo</field>
+        <field name="department_id" ref="dept_administracion"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_com" model="hr.job">
+        <field name="name">Asistente Comercial</field>
+        <field name="department_id" ref="dept_legal"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_cma" model="hr.job">
+        <field name="name">Asistente de Compras</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_rhh" model="hr.job">
+        <field name="name">Asistente de Recursos Humanos</field>
+        <field name="department_id" ref="dept_rrhh"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_tic" model="hr.job">
+        <field name="name">Asistente de TI</field>
+        <field name="department_id" ref="dept_tecnologia"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_leg" model="hr.job">
+        <field name="name">Asistente Legal</field>
+        <field name="department_id" ref="dept_legal"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_log" model="hr.job">
+        <field name="name">Asistente Logístico</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_cnt" model="hr.job">
+        <field name="name">Auxiliar Contable</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_aad" model="hr.job">
+        <field name="name">Auxiliar Administrativo</field>
+        <field name="department_id" ref="dept_administracion"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_cmp" model="hr.job">
+        <field name="name">Auxiliar de Compras</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_acr" model="hr.job">
+        <field name="name">Auxiliar de Cuentas por Cobrar</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_acx" model="hr.job">
+        <field name="name">Auxiliar de Cuentas por Pagar</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_agf" model="hr.job">
+        <field name="name">Auxiliar de Gestión Financiera</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_tes" model="hr.job">
+        <field name="name">Auxiliar de Tesorería</field>
+        <field name="department_id" ref="dept_finanzas"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_rha" model="hr.job">
+        <field name="name">Auxiliar de Recursos Humanos</field>
+        <field name="department_id" ref="dept_rrhh"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_alm" model="hr.job">
+        <field name="name">Auxiliar de Bodega</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_ase" model="hr.job">
+        <field name="name">Auxiliar de Servicios Generales | Limpieza</field>
+        <field name="department_id" ref="dept_servicios_generales"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_msg" model="hr.job">
+        <field name="name">Auxiliar de Servicios Generales | Mensajero</field>
+        <field name="department_id" ref="dept_servicios_generales"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_gen" model="hr.job">
+        <field name="name">Auxiliar General de Proyecto</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_act" model="hr.job">
+        <field name="name">Auxiliar Técnico de Campo</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_civ" model="hr.job">
+        <field name="name">Ayudante Civil</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_ayt" model="hr.job">
+        <field name="name">Ayudante de Mantenimiento</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_ayc" model="hr.job">
+        <field name="name">Ayudante de Obra Civil</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_aye" model="hr.job">
+        <field name="name">Ayudante Eléctrico</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_aym" model="hr.job">
+        <field name="name">Ayudante Mecánico</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_drv" model="hr.job">
+        <field name="name">Conductor / Chofer de Proyecto</field>
+        <field name="department_id" ref="dept_compras_logistica"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_opm" model="hr.job">
+        <field name="name">Operador de Maquinaria Liviana</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_ome" model="hr.job">
+        <field name="name">Operario de Mantenimiento Eléctrico</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_omm" model="hr.job">
+        <field name="name">Operario de Mantenimiento Mecánico</field>
+        <field name="department_id" ref="dept_operaciones"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_sec" model="hr.job">
+        <field name="name">Secretaria Ejecutiva</field>
+        <field name="department_id" ref="dept_direccion_general"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_a_vgl" model="hr.job">
+        <field name="name">Vigilante / Seguridad Patrimonial</field>
+        <field name="department_id" ref="dept_servicios_generales"/>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="job_t_cstm" model="hr.job">
+        <field name="name">Technical Consultant / Technical Advisor</field>
+        <field name="department_id" ref="dept_proyectos_epc"/>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

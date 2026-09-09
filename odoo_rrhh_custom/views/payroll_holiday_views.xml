@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_payroll_holiday_list" model="ir.ui.view">
+        <field name="name">payroll.holiday.list</field>
+        <field name="model">payroll.holiday</field>
+        <field name="arch" type="xml">
+            <list string="Feriados" editable="bottom">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_payroll_holiday_search" model="ir.ui.view">
+        <field name="name">payroll.holiday.search</field>
+        <field name="model">payroll.holiday</field>
+        <field name="arch" type="xml">
+            <search string="Buscar feriados">
+                <field name="name"/>
+                <field name="date"/>
+                <filter string="Este año" name="this_year"
+                        domain="[('date', '>=', (context_today().replace(month=1, day=1)).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', (context_today().replace(month=12, day=31)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Empresa" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_payroll_holiday" model="ir.actions.act_window">
+        <field name="name">Feriados</field>
+        <field name="res_model">payroll.holiday</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_payroll_holiday_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Agrega el primer feriado</p>
+            <p>Las horas extra que caigan en estas fechas (o en domingo) se clasifican
+               como "Días libres o feriados" al importar el reporte de asistencia.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_payroll_holiday" name="Feriados"
+              parent="menu_rrhh_custom_root" action="action_payroll_holiday" sequence="46"
+              groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+
+    <record id="view_payroll_holiday_worked_list" model="ir.ui.view">
+        <field name="name">payroll.holiday.worked.list</field>
+        <field name="model">payroll.holiday.worked</field>
+        <field name="arch" type="xml">
+            <list string="Feriados trabajados" editable="bottom">
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_payroll_holiday_worked" model="ir.actions.act_window">
+        <field name="name">Feriados trabajados</field>
+        <field name="res_model">payroll.holiday.worked</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Sin feriados trabajados registrados</p>
+            <p>Se llenan solos al importar el reporte de asistencia de una semana con feriado;
+               también se pueden agregar a mano. Cada uno duplica el pago de ese día en la
+               planilla del empleado.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_payroll_holiday_worked" name="Feriados trabajados"
+              parent="menu_rrhh_custom_root" action="action_payroll_holiday_worked" sequence="47"
+              groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+
+</odoo>

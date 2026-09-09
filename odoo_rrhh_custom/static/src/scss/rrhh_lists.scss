@@ -1,0 +1,110 @@
+// Odoo calcula el ancho de cada columna según el tipo de campo (los montos
+// se estiman en ~125px) y le da TODO el resto del ancho de la tabla a la
+// única columna de texto libre (Empleado) — de ahí el hueco enorme antes de
+// las demás columnas, y de paso deja tan poco ancho a las columnas de monto
+// que sus encabezados largos ("Salario neto LPS", etc.) se truncan con "...".
+// Se fuerza (!important, porque Odoo pone el ancho como inline style) un
+// reparto proporcional entre las columnas reales; la de selección (checkbox)
+// se deja con su ancho fijo de siempre.
+.o_rrhh_salary_list {
+    .o_list_table {
+        table-layout: fixed;
+
+        th, td {
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: center !important;
+        }
+
+        // Odoo mete el texto del encabezado en un <span class="o_list_number_th">
+        // con su propio text-align: right — centrar el <th> no alcanza, hay que
+        // centrar ese span (y cualquier otro contenido) directamente.
+        th * {
+            text-align: center !important;
+        }
+
+        th:nth-child(2), td:nth-child(2) { width: 18% !important; } // Empleado
+        th:nth-child(3), td:nth-child(3) { width: 14% !important; } // Salario en USD
+        th:nth-child(4), td:nth-child(4) { width: 14% !important; } // Salario LPS
+        th:nth-child(5), td:nth-child(5) { width: 12% !important; } // Bono LPS
+        th:nth-child(6), td:nth-child(6) { width: 14% !important; } // Salario neto LPS
+        th:nth-child(7), td:nth-child(7) { width: 14% !important; } // Salario neto USD
+        th:nth-child(8), td:nth-child(8) { width: 14% !important; } // Fecha efectiva
+    }
+}
+
+// Misma idea para la lista de líneas de planilla, pero como tiene columnas
+// opcionales (Retroactivo, Incapacidad, Impuesto Municipal, ISR) que el
+// usuario puede mostrar/ocultar, la posición (nth-child) no es confiable —
+// se usa el atributo data-name que Odoo pone en cada <th>. En una tabla con
+// table-layout:fixed, el ancho de la primera fila (el encabezado) define el
+// ancho de toda la columna, así que basta con fijarlo ahí.
+.o_rrhh_payroll_line_list {
+    .o_list_table {
+        table-layout: fixed;
+
+        th, td {
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center !important;
+        }
+
+        th * {
+            text-align: center !important;
+        }
+
+        th[data-name="employee_id"] {
+            width: 170px !important;
+        }
+
+        td .o_field_many2one_avatar .d-flex {
+            justify-content: center;
+        }
+    }
+}
+
+// Mismas reglas de padding/centrado para Solicitudes de Contratación. También
+// tiene columnas opcionales (Departamento, Plazas, Jefe solicitante, Fecha,
+// Empresa), así que se usa data-name en vez de nth-child, igual que en la
+// lista de líneas de planilla.
+// El campo binario "Adjunto" de Permisos Laborales se estiraba a todo el
+// ancho de la columna del grupo (comportamiento normal de o_field_binary
+// dentro de un <group> de una sola columna). Se limita su ancho para que no
+// se vea desproporcionado junto al botón "Sube tu archivo".
+.o_rrhh_attachment_narrow {
+    max-width: 260px;
+}
+
+// El botón "Descargar" del campo binario ya no hace falta: el modal de
+// "Previsualizar" (mismo widget que Documentación de Candidatos, en modo
+// compacto — solo ícono) trae su propio botón de descarga.
+.o_rrhh_attachment_row .o_download_file_button {
+    display: none;
+}
+
+.o_rrhh_hiring_request_list {
+    .o_list_table {
+        table-layout: fixed;
+
+        th, td {
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: center !important;
+        }
+
+        th * {
+            text-align: center !important;
+        }
+
+        th[data-name="job_profile_id"] {
+            width: 200px !important;
+        }
+
+        // El widget many2one_avatar_employee (columna "Jefe solicitante")
+        // envuelve el avatar + nombre en un contenedor flex propio — ahí
+        // text-align no pinta nada, hay que centrar con justify-content.
+        td .o_field_many2one_avatar .d-flex {
+            justify-content: center;
+        }
+    }
+}

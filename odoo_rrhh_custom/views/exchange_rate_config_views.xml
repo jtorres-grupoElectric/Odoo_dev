@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_exchange_rate_config_form" model="ir.ui.view">
+        <field name="name">hr.exchange.rate.config.form</field>
+        <field name="model">hr.exchange.rate.config</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de Cambio (BCH)">
+                <header>
+                    <button name="action_test_connection" string="Probar conexión" type="object" />
+                    <button name="action_sync_now" string="Sincronizar ahora" type="object"
+                        class="oe_highlight" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1" /></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active" />
+                            <field name="base_url" />
+                            <field name="api_key" widget="password" groups="base.group_system" />
+                        </group>
+                        <group>
+                            <field name="last_sync" readonly="1" />
+                        </group>
+                    </group>
+                    <group string="Último resultado">
+                        <field name="last_status" nolabel="1" readonly="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_exchange_rate_config" model="ir.actions.act_window">
+        <field name="name">Tipo de Cambio (BCH)</field>
+        <field name="res_model">hr.exchange.rate.config</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_exchange_rate_config_open" model="ir.actions.server">
+        <field name="name">Tipo de Cambio (BCH)</field>
+        <field name="model_id" ref="model_hr_exchange_rate_config" />
+        <field name="state">code</field>
+        <field name="code">action = env['hr.exchange.rate.config']._get_singleton().get_formview_action()</field>
+    </record>
+
+    <menuitem id="menu_exchange_rate_config" name="Tipo de Cambio (BCH)"
+        parent="base.menu_custom" action="action_exchange_rate_config_open" sequence="90"
+        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+
+</odoo>

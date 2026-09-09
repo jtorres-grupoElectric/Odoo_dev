@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_overtime_bulk_import_form" model="ir.ui.view">
+        <field name="name">employee.overtime.bulk.import.form</field>
+        <field name="model">employee.overtime.bulk.import</field>
+        <field name="arch" type="xml">
+            <form string="Carga masiva de horas extra">
+                <field name="state" invisible="1" />
+                <field name="created_count" invisible="1" />
+                <group invisible="state != 'choose'">
+                    <div class="text-muted" colspan="2"> Sube el <strong>reporte de asistencia</strong>
+                        semanal (<strong>.xls</strong> o <strong>.xlsx</strong>). </div>
+                    <field name="file" filename="filename" required="state == 'choose'" />
+                    <field name="filename" invisible="1" />
+                    <field name="week_start_override" />
+                    <field name="replace_existing" />
+                </group>
+                <group invisible="state != 'done'">
+                    <field name="result_summary" nolabel="1" readonly="1" />
+                </group>
+                <footer>
+                    <button name="action_import" type="object" string="Importar"
+                        class="btn-primary" invisible="state != 'choose'" />
+                    <button name="action_open_records" type="object"
+                        string="Ver horas extra creadas"
+                        class="btn-primary" invisible="state != 'done' or created_count == 0" />
+                    <button string="Cerrar" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_overtime_bulk_import" model="ir.actions.act_window">
+        <field name="name">Carga masiva de horas extra</field>
+        <field name="res_model">employee.overtime.bulk.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.claude/
+
+# Insumos del cliente / archivos de trabajo — no van al servidor
+*.xls
+*.xlsx
+*.pdf
+BECOSA_report*

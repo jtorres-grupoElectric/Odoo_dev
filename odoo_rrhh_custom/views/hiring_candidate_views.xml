@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hiring_candidate_list" model="ir.ui.view">
+        <field name="name">hiring.candidate.list</field>
+        <field name="model">hiring.candidate</field>
+        <field name="arch" type="xml">
+            <list string="Candidatos" decoration-muted="state == 'rejected'">
+                <field name="name" decoration-bf="1" />
+                <field name="request_id" optional="show" />
+                <field name="agency_id" optional="hide" />
+                <field name="score" optional="show" />
+                <field name="interview_date" optional="hide" />
+                <field name="employee_id" widget="many2one_avatar_employee" optional="hide"
+                    string="Empleado" />
+                <field name="state" widget="badge"
+                    decoration-info="state == 'proposed'"
+                    decoration-warning="state in ('filtered', 'interviewed')"
+                    decoration-success="state in ('approved', 'contracted', 'finalized')"
+                    decoration-danger="state == 'rejected'" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hiring_candidate_search" model="ir.ui.view">
+        <field name="name">hiring.candidate.search</field>
+        <field name="model">hiring.candidate</field>
+        <field name="arch" type="xml">
+            <search string="Buscar candidatos">
+                <field name="name" />
+                <field name="request_id" />
+                <field name="agency_id" />
+                <filter string="Por entrevistar" name="to_interview"
+                    domain="[('state', '=', 'filtered')]" />
+                <filter string="Activos" name="active_candidates"
+                    domain="[('state', 'not in', ('contracted', 'finalized', 'rejected'))]" />
+                <group expand="0" string="Agrupar por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}" />
+                    <filter string="Solicitud" name="group_request"
+                        context="{'group_by': 'request_id'}" />
+                    <filter string="Agencia" name="group_agency" context="{'group_by': 'agency_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hiring_candidate_form" model="ir.ui.view">
+        <field name="name">hiring.candidate.form</field>
+        <field name="model">hiring.candidate</field>
+        <field name="arch" type="xml">
+            <form string="Candidato">
+                <header>
+                    <button name="action_filter" string="Filtrar" type="object"
+                        class="oe_highlight" invisible="state != 'proposed'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_mark_interviewed" string="Agendar Entrevista"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'filtered' or not interview_date"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_approve" string="Aprobar" type="object"
+                        class="oe_highlight" invisible="state != 'interviewed'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_mark_contracted" string="Contratado" type="object"
+                        class="oe_highlight" invisible="state != 'approved'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_finalize" string="Finalizar y crear perfil" type="object"
+                        class="oe_highlight" invisible="state != 'contracted'"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                    <button name="action_reject" string="Rechazar" type="object"
+                        invisible="state in ('contracted', 'finalized', 'rejected')"
+                        groups="odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista" />
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="proposed,filtered,interviewed,approved,contracted,finalized" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Candidato" />
+                        <h1>
+                            <field name="name" placeholder="Nombre del candidato" />
+                        </h1>
+                    </div>
+                    <field name="currency_id" invisible="1" />
+                    <notebook>
+                        <page string="Datos del candidato" name="candidate_data">
+                            <group>
+                                <group>
+                                    <field name="request_id" />
+                                    <field name="email" />
+                                    <field name="phone" />
+                                    <field name="id_document" />
+                                </group>
+                                <group>
+                                    <field name="agency_id" />
+                                    <field name="score" />
+                                    <field name="expected_salary" widget="monetary" />
+                                    <field name="interview_date" />
+                                    <field name="approver_id" readonly="1" />
+                                    <field name="employee_id" readonly="1" />
+                                </group>
+                            </group>
+                            <group string="Documentación">
+                                <field name="document_ids" nolabel="1"
+                                    readonly="state == 'finalized'">
+                                    <list editable="bottom">
+                                        <field name="document_type" />
+                                        <field name="mandatory" widget="boolean_toggle" />
+                                        <field name="attachment_filename" column_invisible="1" />
+                                        <field name="attachment" filename="attachment_filename"
+                                            string="Archivo" />
+                                        <field name="notes" />
+                                        <widget name="doc_preview_button" />
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Datos para el perfil" name="profile_data"
+                            groups="odoo_rrhh_custom.group_rrhh_especialista"
+                            invisible="state not in ('contracted', 'finalized')">
+                            <p class="text-muted" invisible="state != 'contracted'">
+                                Complete la información privada del empleado. Al pulsar «Finalizar y
+                                crear perfil» se crea automáticamente la ficha del empleado, su
+                                salario
+                                y la solicitud de documentos (con la documentación ya subida
+                                arriba).
+                            </p>
+                            <group readonly="state != 'contracted'">
+                                <group string="Identificación y fiscal">
+                                    <field name="profile_identification_id" />
+                                    <field name="profile_rtn" />
+                                    <field name="profile_inss_no" />
+                                    <field name="profile_rap_no" />
+                                </group>
+                                <group string="Datos personales">
+                                    <field name="profile_birthday" />
+                                    <field name="profile_place_of_birth" />
+                                    <field name="profile_country_id" options="{'no_create': True}" />
+                                    <field name="profile_gender" />
+                                    <field name="profile_marital" />
+                                    <field name="profile_children" />
+                                </group>
+                                <group string="Contacto privado">
+                                    <field name="profile_private_street" />
+                                    <field name="profile_private_city" />
+                                    <field name="profile_private_phone" />
+                                    <field name="profile_private_email" />
+                                </group>
+                                <group string="Contacto de emergencia">
+                                    <field name="profile_emergency_contact" />
+                                    <field name="profile_emergency_relationship" />
+                                    <field name="profile_emergency_phone" />
+                                </group>
+                                <group string="Formación">
+                                    <field name="profile_education_level" />
+                                    <field name="profile_study_field" />
+                                    <field name="profile_study_school" />
+                                </group>
+                                <group string="Datos laborales y pago">
+                                    <field name="profile_hire_date" />
+                                    <field name="profile_department_id"
+                                        options="{'no_create': True, 'no_open': True}" />
+                                    <field name="profile_job_id"
+                                        options="{'no_create': True, 'no_open': True}" />
+                                    <field name="profile_wage" widget="monetary"
+                                        options="{'currency_field': 'currency_id'}" />
+                                    <field name="profile_wage_usd" />
+                                    <field name="profile_pays_in_usd" />
+                                    <field name="profile_wage_effective_date" />
+                                    <field name="profile_bank_id" options="{'no_create': True}" />
+                                    <field name="profile_bank_account_number" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hiring_candidate" model="ir.actions.act_window">
+        <field name="name">Candidatos</field>
+        <field name="res_model">hiring.candidate</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hiring_candidate_search" />
+        <field name="context">{'search_default_active_candidates': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registra el primer candidato</p>
+        </field>
+    </record>
+
+    <!-- Sin menú propio a propósito: el modelo sigue funcionando igual
+         (filtrar, entrevistar, aprobar, rechazar, contratar), pero solo se
+         consulta dentro de su Solicitud de Contratación, no como una
+         sección aparte del módulo. -->
+
+</odoo>

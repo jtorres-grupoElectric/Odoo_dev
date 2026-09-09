@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hiring_request_company_rule" model="ir.rule">
+        <field name="name">Hiring Request: multiempresa</field>
+        <field name="model_id" ref="model_hiring_request"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="employment_agency_company_rule" model="ir.rule">
+        <field name="name">Employment Agency: multiempresa</field>
+        <field name="model_id" ref="model_employment_agency"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="hiring_candidate_company_rule" model="ir.rule">
+        <field name="name">Hiring Candidate: multiempresa</field>
+        <field name="model_id" ref="model_hiring_candidate"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="employee_salary_company_rule" model="ir.rule">
+        <field name="name">Employee Salary: multiempresa</field>
+        <field name="model_id" ref="model_employee_salary"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="labor_permission_company_rule" model="ir.rule">
+        <field name="name">Labor Permission: multiempresa</field>
+        <field name="model_id" ref="model_labor_permission"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="labor_permission_own_rule" model="ir.rule">
+        <field name="name">Labor Permission: empleado solo ve las suyas</field>
+        <field name="model_id" ref="model_labor_permission"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="employee_document_request_company_rule" model="ir.rule">
+        <field name="name">Employee Document Request: multiempresa</field>
+        <field name="model_id" ref="model_employee_document_request"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="employee_document_request_own_rule" model="ir.rule">
+        <field name="name">Employee Document Request: empleado solo ve la suya</field>
+        <field name="model_id" ref="model_employee_document_request"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="employee_document_line_own_rule" model="ir.rule">
+        <field name="name">Employee Document Line: empleado solo ve las de su propia solicitud</field>
+        <field name="model_id" ref="model_employee_document_line"/>
+        <field name="domain_force">[('request_id.employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="employee_overtime_company_rule" model="ir.rule">
+        <field name="name">Employee Overtime: multiempresa</field>
+        <field name="model_id" ref="model_employee_overtime"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="employee_overtime_own_rule" model="ir.rule">
+        <field name="name">Employee Overtime: empleado solo ve las suyas</field>
+        <field name="model_id" ref="model_employee_overtime"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="employee_vacation_allocation_company_rule" model="ir.rule">
+        <field name="name">Employee Vacation Allocation: multiempresa</field>
+        <field name="model_id" ref="model_employee_vacation_allocation"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="employee_vacation_allocation_own_rule" model="ir.rule">
+        <field name="name">Employee Vacation Allocation: empleado solo ve la suya</field>
+        <field name="model_id" ref="model_employee_vacation_allocation"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="employee_salary_own_rule" model="ir.rule">
+        <field name="name">Employee Salary: empleado solo ve el suyo</field>
+        <field name="model_id" ref="model_employee_salary"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_rrhh_empleado'))]"/>
+    </record>
+
+    <record id="payroll_payslip_company_rule" model="ir.rule">
+        <field name="name">Payroll Payslip: multiempresa</field>
+        <field name="model_id" ref="model_payroll_payslip"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="payroll_line_company_rule" model="ir.rule">
+        <field name="name">Payroll Line: multiempresa</field>
+        <field name="model_id" ref="model_payroll_line"/>
+        <field name="domain_force">['|', ('payslip_id.company_id', '=', False), ('payslip_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

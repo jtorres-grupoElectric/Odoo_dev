@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="odoo_rrhh_custom.DocPreviewButton">
+        <button t-if="hasFile and compact" type="button"
+                class="btn btn-link btn-sm lh-1 fa fa-eye o_rrhh_preview_file_button"
+                t-on-click="onClick" data-tooltip="Previsualizar" aria-label="Previsualizar"/>
+        <button t-elif="hasFile" type="button"
+                class="btn btn-link btn-sm p-0 text-nowrap"
+                t-on-click="onClick" title="Previsualizar">
+            <i class="fa fa-eye me-1"/>Previsualizar
+        </button>
+    </t>
+
+    <t t-name="odoo_rrhh_custom.DocPreviewDialog">
+        <Dialog title="props.name" size="'xl'" contentClass="'o_rrhh_doc_preview'">
+            <div class="d-flex justify-content-center align-items-start"
+                 style="min-height: 60vh; background: #525659;">
+                <iframe t-if="props.isPdf" t-ref="frame" t-att-title="props.name"
+                        class="w-100 border-0" style="height: 78vh;"/>
+                <img t-elif="props.isImage" t-ref="img" t-att-alt="props.name"
+                     class="mw-100 my-3" style="max-height: 78vh; object-fit: contain;"/>
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="onDownload">
+                    <i class="fa fa-download me-1"/>Descargar
+                </button>
+                <button class="btn btn-secondary" t-on-click="() => props.close()">Cerrar</button>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

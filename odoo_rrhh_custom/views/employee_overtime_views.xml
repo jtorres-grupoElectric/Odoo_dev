@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_overtime_list" model="ir.ui.view">
+        <field name="name">employee.overtime.list</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <list string="Horas Extra" decoration-muted="state == 'rejected'">
+                <header>
+                    <button name="%(odoo_rrhh_custom.action_overtime_bulk_import)d" type="action"
+                            string="Carga masiva" display="always"
+                            groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+                </header>
+                <field name="employee_id"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="date"/>
+                <field name="hours"/>
+                <field name="journey_type"/>
+                <field name="surcharge_percentage" optional="hide"/>
+                <field name="amount" widget="monetary"/>
+                <field name="source" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'requested'"
+                       decoration-warning="state == 'approved_jefe'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_employee_overtime_form" model="ir.ui.view">
+        <field name="name">employee.overtime.form</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <form string="Horas Extra">
+                <header>
+                    <button name="action_approve" string="Aprobar (Jefe)" type="object"
+                            class="oe_highlight" invisible="state != 'requested'"
+                            groups="odoo_rrhh_custom.group_rrhh_jefe_departamento"/>
+                    <button name="action_reject" string="Rechazar" type="object"
+                            invisible="state != 'requested'"
+                            groups="odoo_rrhh_custom.group_rrhh_jefe_departamento"/>
+                    <button name="action_approve_rrhh" string="Aprobar (RRHH)" type="object"
+                            class="oe_highlight" invisible="state != 'approved_jefe'"
+                            groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+                    <button name="action_reject" string="Rechazar" type="object"
+                            invisible="state != 'approved_jefe'"
+                            groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+                    <field name="state" widget="statusbar" statusbar_visible="requested,approved_jefe,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'requested'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'requested'"/>
+                            <field name="date" readonly="state != 'requested'"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="hours" readonly="state != 'requested'"/>
+                            <field name="journey_type" readonly="state != 'requested'"/>
+                            <field name="hourly_rate" widget="monetary" readonly="state != 'requested'"/>
+                            <field name="surcharge_percentage" readonly="1"/>
+                            <field name="amount" widget="monetary" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="approver_id" readonly="1"/>
+                        <field name="rrhh_approver_id" readonly="1"/>
+                    </group>
+                    <group string="Justificación">
+                        <field name="justification" nolabel="1" readonly="state != 'requested'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_overtime_search" model="ir.ui.view">
+        <field name="name">employee.overtime.search</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <search string="Buscar horas extra">
+                <field name="employee_id"/>
+                <filter string="Mis horas extra" name="my_overtime"
+                        domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter string="Pendientes" name="pending"
+                        domain="[('state', 'in', ('requested', 'approved_jefe'))]"/>
+                <filter string="Desde reporte de asistencia" name="from_import"
+                        domain="[('source', '=', 'attendance_import')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Empleado" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Fecha" name="group_date" context="{'group_by': 'date'}"/>
+                    <filter string="Tipo de jornada" name="group_journey" context="{'group_by': 'journey_type'}"/>
+                    <filter string="Origen" name="group_source" context="{'group_by': 'source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_employee_overtime" model="ir.actions.act_window">
+        <field name="name">Horas Extra</field>
+        <field name="res_model">employee.overtime</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_employee_overtime_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registra la primera solicitud de horas extra</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_employee_overtime" name="Horas Extra"
+              parent="menu_rrhh_custom_root" action="action_employee_overtime" sequence="45"
+              groups="odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio"/>
+
+</odoo>
