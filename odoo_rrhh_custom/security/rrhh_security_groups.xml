@@ -28,16 +28,36 @@
 
     <!-- Especialista RRHH: gestión completa (candidatos, agencias, empleados,
          salario individual, documentos); visibilidad total del flujo.
-         Tampoco hereda Empleado, por la misma razón que Jefe de Departamento. -->
+         Tampoco hereda Empleado, por la misma razón que Jefe de Departamento.
+         Implica "Oficial de RRHH" (hr.group_hr_user): el flujo de contratación
+         y de planilla lee la ficha completa del empleado (fecha de ingreso,
+         RTN, banco, feriados trabajados, horas extra…), campos que un usuario
+         sin rol de RRHH no puede leer del perfil "público" de hr.employee. -->
     <record id="group_rrhh_especialista" model="res.groups">
         <field name="name">Especialista RRHH</field>
         <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
     </record>
 
     <!-- Dueño / Socio: aprobar solicitudes de contratación -->
     <record id="group_rrhh_socio" model="res.groups">
         <field name="name">Dueño / Socio</field>
         <field name="category_id" ref="module_category_rrhh_custom"/>
+    </record>
+
+    <!-- Solo Planillas: ve y trabaja únicamente el apartado "Planillas"
+         (payroll.payslip / payroll.line). No ve Contratación, Salarios,
+         Horas Extra, Feriados ni Permisos. Tiene los accesos de lectura
+         mínimos que necesitan los cálculos de la planilla (salario
+         individual, horas extra y feriados trabajados del empleado). -->
+    <record id="group_rrhh_planillas" model="res.groups">
+        <field name="name">Planillas</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <!-- Igual que Especialista: el cálculo de la planilla lee datos de la
+             ficha del empleado que no están en su perfil público. Con esto el
+             usuario también ve la app estándar "Empleados"; lo específico del
+             módulo custom sigue limitado a "Planillas" por los menús. -->
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
     </record>
 
     <!-- El administrador del sistema (grupo "Ajustes") recibe automáticamente

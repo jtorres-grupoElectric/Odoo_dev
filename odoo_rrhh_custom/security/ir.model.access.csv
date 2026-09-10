@@ -39,3 +39,8 @@ access_payroll_line_socio,payroll.line.socio,model_payroll_line,group_rrhh_socio
 access_exchange_rate_history_especialista,hr.exchange.rate.history.especialista,model_hr_exchange_rate_history,group_rrhh_especialista,1,1,1,0
 access_exchange_rate_history_socio,hr.exchange.rate.history.socio,model_hr_exchange_rate_history,group_rrhh_socio,1,0,0,0
 access_exchange_rate_config_especialista,hr.exchange.rate.config.especialista,model_hr_exchange_rate_config,group_rrhh_especialista,1,1,1,0
+access_payroll_payslip_planillas,payroll.payslip.planillas,model_payroll_payslip,group_rrhh_planillas,1,1,1,0
+access_payroll_line_planillas,payroll.line.planillas,model_payroll_line,group_rrhh_planillas,1,1,1,1
+access_employee_salary_planillas,employee.salary.planillas,model_employee_salary,group_rrhh_planillas,1,0,0,0
+access_employee_overtime_planillas,employee.overtime.planillas,model_employee_overtime,group_rrhh_planillas,1,0,0,0
+access_payroll_holiday_worked_planillas,payroll.holiday.worked.planillas,model_payroll_holiday_worked,group_rrhh_planillas,1,0,0,0

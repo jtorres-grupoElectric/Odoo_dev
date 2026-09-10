@@ -31,10 +31,10 @@
                         confirm="¿Anular esta planilla en borrador? Se eliminará por completo y no se podrá recuperar." />
                     <button name="action_calculate" string="Pasar a Observación" type="object"
                         class="oe_highlight" invisible="state != 'draft'"
-                        groups="odoo_rrhh_custom.group_rrhh_especialista" />
+                        groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_planillas" />
                     <button name="action_recalculate_days" string="Recalcular días" type="object"
                         invisible="state != 'draft'"
-                        groups="odoo_rrhh_custom.group_rrhh_especialista"
+                        groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_planillas"
                         help="Vuelve a ajustar 'Días trabajados' de cada línea contra las incapacidades aprobadas del periodo. Útil si un permiso de incapacidad se aprobó después de generar esta planilla." />
                     <button name="action_approve" string="Aprobar" type="object"
                         class="oe_highlight" invisible="state != 'calculated'"
@@ -167,6 +167,6 @@
 
     <menuitem id="menu_payroll_payslip" name="Planillas"
         parent="menu_rrhh_custom_root" action="action_payroll_payslip" sequence="45"
-        groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio" />
+        groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_planillas" />
 
 </odoo>
