@@ -40,4 +40,13 @@
         <field name="category_id" ref="module_category_rrhh_custom"/>
     </record>
 
+    <!-- El administrador del sistema (grupo "Ajustes") recibe automáticamente
+         "Especialista RRHH", que ya tiene acceso completo a todos los modelos
+         del módulo y aparece en todos los menús. Así el admin ve y gestiona
+         todo el RRHH sin tener que agregarlo a mano a cada grupo, y sin tocar
+         la visibilidad del resto de los usuarios. -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_rrhh_especialista'))]"/>
+    </record>
+
 </odoo>
