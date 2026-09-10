@@ -1,0 +1,1349 @@
+<title>Bitácora RRHH</title>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface-2: #f1ede4;
+    --ink: #1c2620;
+    --ink-muted: #5c6b63;
+    --accent: #2f6f5e;
+    --accent-strong: #204d40;
+    --accent-soft: #e3eee9;
+    --line: #dad3c4;
+    --amber: #a9711f;
+    --amber-soft: #f5e9d7;
+    --red: #a8412f;
+    --red-soft: #f6e5e1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14181a;
+      --surface: #1b211f;
+      --surface-2: #212824;
+      --ink: #eae6db;
+      --ink-muted: #9aa79e;
+      --accent: #59b096;
+      --accent-strong: #86d2b8;
+      --accent-soft: #223530;
+      --line: #333c37;
+      --amber: #d9a44c;
+      --amber-soft: #34291a;
+      --red: #d97a67;
+      --red-soft: #3a2320;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181a;
+    --surface: #1b211f;
+    --surface-2: #212824;
+    --ink: #eae6db;
+    --ink-muted: #9aa79e;
+    --accent: #59b096;
+    --accent-strong: #86d2b8;
+    --accent-soft: #223530;
+    --line: #333c37;
+    --amber: #d9a44c;
+    --amber-soft: #34291a;
+    --red: #d97a67;
+    --red-soft: #3a2320;
+  }
+
+  * { box-sizing: border-box; }
+  html { text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", ui-sans-serif, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-strong); }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  header.hero {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+  }
+  h1 {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 4.5vw, 2.9rem);
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    color: var(--ink-muted);
+    font-size: 1.05rem;
+    max-width: 65ch;
+    text-wrap: pretty;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+  .meta-row strong { color: var(--ink); font-weight: 600; }
+
+  section h2 {
+    font-family: Georgia, "Iowan Old Style", serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.005em;
+  }
+  section > p.section-note {
+    color: var(--ink-muted);
+    margin: -0.6rem 0 1.4rem;
+    max-width: 68ch;
+  }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 2px solid var(--line);
+    margin-left: 0.55rem;
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 1.9rem 1.6rem;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: attr(data-n);
+    position: absolute;
+    left: -0.95rem;
+    top: 0;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    color: var(--accent-strong);
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tl-item h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  .tl-item p {
+    margin: 0;
+    color: var(--ink-muted);
+    max-width: 66ch;
+  }
+  .tl-item .tags {
+    margin-top: 0.55rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border: 1px solid transparent;
+  }
+  .tag.pending { background: var(--amber-soft); color: var(--amber); }
+  .tag.fixed { background: var(--accent-soft); color: var(--accent-strong); }
+
+  /* Diagram cards */
+  .diagram-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.5rem 1.5rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .diagram-card + .diagram-card { margin-top: 1.3rem; }
+  .diagram-card h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 650;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .diagram-card h3 .num {
+    font-family: ui-monospace, monospace;
+    color: var(--accent-strong);
+    font-size: 0.85rem;
+  }
+  .diagram-card .caption {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    margin: -0.4rem 0 0;
+  }
+  .mermaid-shell {
+    overflow-x: auto;
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+
+  /* Tables */
+  .table-shell { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 0.92rem;
+    min-width: 560px;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    background: var(--surface-2);
+    font-weight: 650;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td code, .cred {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    background: var(--surface-2);
+    padding: 0.1rem 0.4rem;
+    border-radius: 5px;
+  }
+  .dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+  }
+  .dot.yes { background: var(--accent); }
+  .dot.no { background: var(--red); }
+  .dot.partial { background: var(--amber); }
+
+  /* Bug log */
+  .bug-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.9rem;
+  }
+  .bug-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--red);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+  }
+  .bug-card h4 {
+    margin: 0 0 0.3rem;
+    font-size: 0.92rem;
+    font-weight: 650;
+  }
+  .bug-card p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--ink-muted);
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.6rem;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 2.5rem 1.1rem 4rem; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Odoo 18 · Módulo custom · odoo_rrhh_custom</span>
+    <h1>Bitácora RRHH</h1>
+    <p class="lede">Memoria viva del proyecto: qué se construyó, en qué orden, qué se rompió y cómo quedó
+      resuelto. Empresa Energía, Sunergy y Solargy — recursos humanos multiempresa, con Planillas en cálculo
+      de neto a pagar y el catálogo real de puestos/departamentos ya cargado.</p>
+    <div class="meta-row">
+      <span><strong>Empresas:</strong> Sunergy · Solargy · Empresa Energía</span>
+      <span><strong>Roles:</strong> Empleado · Jefe · Socio · Especialista RRHH (todo) · Administrador, más una casilla por apartado (Contratación, Salarios, Planillas, Horas Extra, Feriados, Permisos)</span>
+      <span><strong>Modelos custom:</strong> 10 + 1 wizard de permisos</span>
+      <span><strong>Estado:</strong> desplegado en ambiente de prueba (VM Debian sobre Proxmox, repo GitHub, acceso por IP); base limpia con moneda HNL; roles Especialista RRHH y "solo Planillas" verificados end-to-end</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Cómo se construyó</h2>
+    <p class="section-note">Orden real de las fases, no el orden en que aparecen en el documento original.</p>
+    <div class="timeline">
+      <div class="tl-item" data-n="1">
+        <h3>Fundación</h3>
+        <p>Ambiente Docker (Odoo 18 + PostgreSQL) para desarrollo. Cuatro grupos de seguridad
+          (Empleado, Jefe de Departamento, Especialista RRHH, Dueño/Socio) sin herencia entre sí,
+          a propósito, para que las reglas de "solo mis registros" no se filtraran entre roles.</p>
+        <div class="tags"><span class="tag">docker-compose</span><span class="tag">4 grupos</span></div>
+      </div>
+      <div class="tl-item" data-n="2">
+        <h3>Contratación</h3>
+        <p><code>hiring.request</code> → <code>hiring.candidate</code> → <code>hr.employee</code>.
+          Flujo completo probado con los 4 roles: Jefe solicita, Socio aprueba, RRHH busca y filtra
+          candidatos, Jefe aprueba al candidato final, RRHH marca contratado.</p>
+        <div class="tags"><span class="tag">5 estados</span><span class="tag">notificaciones automáticas</span></div>
+      </div>
+      <div class="tl-item" data-n="3">
+        <h3>Documentos de ingreso</h3>
+        <p>Al aprobar un candidato se genera automáticamente <code>employee.document.request</code>
+          con la línea de DNI pendiente de recibir y verificar.</p>
+        <div class="tags"><span class="tag">automático</span></div>
+      </div>
+      <div class="tl-item" data-n="4">
+        <h3>Permisos laborales y vacaciones</h3>
+        <p><code>labor.permission</code> nace con aprobación de un solo paso (Jefe) y luego se
+          amplía a dos pasos (Jefe → RRHH) para que RRHH tenga el visto bueno final, igual que se
+          hizo después con horas extra.</p>
+        <div class="tags"><span class="tag">2 pasos de aprobación</span></div>
+      </div>
+      <div class="tl-item" data-n="5">
+        <h3>Compensación: salario, horas extra y vacaciones con saldo</h3>
+        <p>Se amplía la ficha del empleado con salario individual, <code>employee.overtime</code>
+          (horas extra con cálculo automático de monto) y <code>employee.vacation.allocation</code>
+          (saldo real de vacaciones, calculado según el Código del Trabajo de Honduras, Art. 346).</p>
+        <div class="tags"><span class="tag">pestaña "Compensación y Beneficios"</span><span class="tag">ley hondureña</span></div>
+      </div>
+      <div class="tl-item" data-n="6">
+        <h3>Confidencialidad y administración</h3>
+        <p>Política definida: solo Especialista RRHH y Dueño/Socio ven datos de compensación; Jefe
+          y Empleado no. Se crea un usuario Administrador con control total de permisos por
+          módulo/submódulo y las 3 empresas.</p>
+        <div class="tags"><span class="tag">política de acceso</span><span class="tag">admin@empresaenergia.test</span></div>
+      </div>
+      <div class="tl-item" data-n="7">
+        <h3>Auditoría completa y saneamiento de UI/UX</h3>
+        <p>Revisión de los 9 modelos, 9 vistas y la seguridad completa antes de iniciar Planillas.
+          Se quitó el botón de "Actividades" (mail.activity.mixin) de Contratación y Documentos de
+          ingreso, que no aportaba al flujo. Se cerraron huecos de seguridad reales: menús sin
+          restricción de grupo, ACL faltante para que el Empleado vea su propio salario y su
+          checklist de documentos, y una regla de "solo mis registros" que nunca se aplicaba por
+          falta de ACL base. Se agregaron búsquedas con filtros y "agrupar por" a las 8 listas
+          principales, vistas Kanban de pipeline en Contratación y Candidatos, montos con símbolo
+          de moneda (<code>widget="monetary"</code>) en salarios, y un wizard de <strong>Permisos
+          RRHH</strong> accesible desde la ficha del empleado para que un Especialista asigne roles
+          sin tener que ir a Ajustes → Usuarios → Grupos.</p>
+        <div class="tags"><span class="tag">sin botón Actividades</span><span class="tag">wizard de permisos</span><span class="tag">búsqueda + filtros</span></div>
+      </div>
+      <div class="tl-item" data-n="8">
+        <h3>QA real contra Docker: 5 bugs más antes de dar por cerrada esta fase</h3>
+        <p>No bastaba con que el código se viera bien: se instaló el módulo de verdad (actualización
+          incremental y también instalación limpia en base nueva) dentro del contenedor Docker y se
+          probó en el navegador con datos reales. Salieron 5 bugs que la revisión de código sola no
+          detectó — dos rompían la carga del módulo por completo. Todos corregidos y reverificados
+          con una segunda vuelta de instalación limpia sin errores ni warnings.</p>
+        <div class="tags"><span class="tag">instalación limpia verificada</span><span class="tag">pruebas con usuario real (Laura)</span></div>
+      </div>
+      <div class="tl-item" data-n="9">
+        <h3>Kanban fuera: de vuelta a lista, pero mejorada</h3>
+        <p>El usuario probó el Kanban de Contratación y Candidatos y no le gustó — pidió volver a
+          lista, pero distinta a la original plana. Se quitaron ambas vistas Kanban y se dejó lista
+          como única vista: puesto/nombre en negrita para escanear rápido, avatar circular del
+          jefe solicitante (<code>widget="many2one_avatar_employee"</code>), y columnas secundarias
+          (fecha, agencia, empresa) ocultas por defecto pero activables con el selector de columnas
+          opcionales de Odoo — sin volver a la lista genérica de antes.</p>
+        <div class="tags"><span class="tag">kanban retirado</span><span class="tag">avatares</span><span class="tag">columnas opcionales</span></div>
+      </div>
+      <div class="tl-item" data-n="10">
+        <h3>Planillas: se retoma y se analiza la plantilla real</h3>
+        <p>El cliente compartió la plantilla real en Excel usada hoy por las 3 empresas (hojas
+          Planilla, IHSS, RAP). Se analizó celda por celda, incluyendo fórmulas, para entender el
+          cálculo real de deducciones hondureñas (IHSS con cuota fija L595.16, RAP 1.5%+1.5% sobre
+          excedente del techo de cotización). Con eso se levantó la pausa documentada (ya no depende
+          de que avance Contabilidad — solo el cálculo del neto a pagar se implementa ahora, los
+          asientos contables siguen fuera de alcance) y se publicó un plan de acción con modelo de
+          datos (<code>payroll.payslip</code> / <code>payroll.line</code>) y 6 fases de implementación.
+          Horas extra quedan explícitamente fuera para estas 3 empresas (se reservan para una cuarta
+          empresa futura). <strong>Actualización 2026-08-20:</strong> el cliente confirmó que RAP sí
+          aplica a las 3 empresas, incluida Solargy — la plantilla original la marcaba como exenta,
+          pero esa exención ya no aplica.</p>
+        <div class="tags"><span class="tag">plantilla real analizada</span><span class="tag">IHSS + RAP</span><span class="tag fixed">RAP en Solargy: confirmado</span></div>
+      </div>
+      <div class="tl-item" data-n="11">
+        <h3>Planillas — Fase 1: configuración por empresa</h3>
+        <p>Primera fase del plan implementada: nueva pestaña "Planilla (RRHH)" en la ficha de
+          empresa (<code>res.company</code>) con los campos <code>payroll_applies_ihss</code>,
+          <code>payroll_ihss_fixed_quota</code> (default L595.16), <code>payroll_applies_rap</code>,
+          <code>payroll_rap_ceiling</code> (default L11.903,13) y <code>payroll_rap_percentage</code>
+          (default 1,5%) — todos configurables por empresa en vez de fijos en código. También
+          se agregó <code>pays_in_usd</code> a <code>employee.salary</code>, para el pago directo en
+          cuenta de dólares que usan los socios. Módulo actualizado en Docker sin errores ni warnings.</p>
+        <div class="tags"><span class="tag">res.company extendido</span><span class="tag">QA: Admin + Especialista RRHH</span></div>
+      </div>
+      <div class="tl-item" data-n="12">
+        <h3>Catálogo real de Departamentos y Puestos, cargado desde el PDF del cliente</h3>
+        <p>El cliente compartió "Perfiles de Puestos 25.02.2026.pdf" (105 perfiles de puesto con
+          código, cargo y área). Se extrajo con PyMuPDF, se consolidaron las ~60 áreas granulares del
+          PDF en <strong>13 departamentos</strong> razonables (Dirección General, Operaciones,
+          Finanzas y Contabilidad, Ingeniería, Proyectos/EPC, Comercial, Compras y Logística,
+          Administración, RRHH, Tecnología/TI, Legal, Calidad/SSMA, Servicios Generales) y se
+          precargaron junto con los <strong>105 puestos</strong> como datos del módulo
+          (<code>data/hr_department_job_data.xml</code>, <code>noupdate="1"</code>), disponibles
+          para las 3 empresas. En "Solicitud de Contratación", los campos Departamento y Puesto
+          solicitado quedaron restringidos a solo-selección (<code>no_create</code>, <code>no_open</code>)
+          — nadie crea ni edita un departamento/puesto desde ahí — y el Puesto se filtra
+          dinámicamente según el Departamento elegido, con un <code>onchange</code> que limpia el
+          puesto si ya no corresponde al departamento nuevo.</p>
+        <div class="tags"><span class="tag">105 puestos + 13 departamentos</span><span class="tag">selección restringida</span><span class="tag">filtro dependiente</span></div>
+      </div>
+      <div class="tl-item" data-n="13">
+        <h3>Limpieza de datos de prueba duplicados</h3>
+        <p>El catálogo nuevo convivía con departamentos/puestos de prueba creados a mano antes
+          ("Administración", "Vendedor", "Mantenimiento", específicos de una sola empresa). Se
+          eliminaron, pero no a lo bruto: las 12 solicitudes de contratación reales que ya los usaban
+          (varias en estados activos — aprobada, en búsqueda, contratada) se reasignaron primero a su
+          equivalente del catálogo nuevo (Vendedor → Ejecutivo de Cuentas, Mantenimiento → Técnico de
+          Mantenimiento) para no perder historial ni dejar campos requeridos vacíos.</p>
+        <div class="tags"><span class="tag">sin pérdida de historial</span><span class="tag">12 solicitudes reasignadas</span></div>
+      </div>
+      <div class="tl-item" data-n="14">
+        <h3>Planillas: "Días trabajados" automático según el periodo</h3>
+        <p>En <code>payroll.payslip</code>, el campo "Días trabajados" de cada línea de empleado ya
+          no queda fijo en 30 por defecto: se calcula como el total de días del rango
+          (fin − inicio + 1) al generar las líneas, y se recalcula sobre las líneas existentes si el
+          periodo de una planilla en borrador cambia después. Sigue siendo editable a mano para casos
+          puntuales (ausencias, etc.).</p>
+        <div class="tags"><span class="tag">cálculo automático</span><span class="tag">editable si hace falta</span></div>
+      </div>
+      <div class="tl-item" data-n="15">
+        <h3>Permisos Laborales: campo Empleado siempre bloqueado</h3>
+        <p>El campo "Empleado" dejó de ser un desplegable editable para Jefe/Especialista/Socio
+          mientras el permiso estaba en borrador — ahora es <code>readonly</code> para todos los
+          roles por igual y se autocompleta con el empleado vinculado al usuario que inicia sesión.
+          Además se le quitó la navegación al hacer clic (<code>no_open</code>): antes, un clic sobre
+          el nombre intentaba abrir la ficha del empleado y disparaba un guardado parcial del
+          formulario ("Fecha de inicio y fecha de fin incompletos").</p>
+        <div class="tags"><span class="tag">autocompletado por sesión</span><span class="tag">sin navegación accidental</span></div>
+      </div>
+      <div class="tl-item" data-n="16">
+        <h3>Datos de prueba: antigüedad real para probar Vacaciones</h3>
+        <p>Se asignó fecha de ingreso a los 11 empleados de Empresa Energía, todas con más de 1 año
+          de antigüedad y repartidas entre los 4 tramos de la ley (1, 2, 3 y 4+ años → 10, 12, 15 y
+          20 días respectivamente), para poder generar y probar saldos reales de vacaciones desde
+          "Permisos Laborales → Vacaciones" sin depender de altas nuevas.</p>
+        <div class="tags"><span class="tag">11 empleados con antigüedad</span><span class="tag">4 tramos de ley probados</span></div>
+      </div>
+      <div class="tl-item" data-n="17">
+        <h3>Aprendizaje operativo: actualizar el módulo no basta para código Python</h3>
+        <p>Se confirmó (y costó varias vueltas de debugging) que <code>odoo -u odoo_rrhh_custom</code>
+          actualiza datos y vistas correctamente, pero el proceso web principal (<code>rrhh_odoo_web</code>)
+          no vuelve a importar los archivos <code>.py</code> ya cargados en memoria — un cambio de
+          dominio, <code>onchange</code> o lógica de modelo necesita además <code>docker restart
+          rrhh_odoo_web</code>. Sumado al hallazgo previo de vistas cacheadas en el navegador, la
+          rutina de verificación quedó en 3 pasos: actualizar el módulo → reiniciar el contenedor →
+          recargar el navegador forzando caché (Ctrl+Shift+R).</p>
+        <div class="tags"><span class="tag">docker restart tras cambios .py</span><span class="tag">rutina de verificación en 3 pasos</span></div>
+      </div>
+      <div class="tl-item" data-n="18">
+        <h3>Tasa de cambio real por quincena en Planilla</h3>
+        <p>Hasta ahora la conversión USD → Lempiras de cada planilla heredaba la tasa "manual" de
+          Odoo (desactualizada desde 2010) a la fecha del salario individual, no del periodo. El
+          cliente entregó el histórico oficial del Banco Central de Honduras
+          (<code>Precio Promedio Diario del Dólar.xlsx</code>, serie diaria 2000–2026, columnas
+          Compra/Venta) y definió una regla propia: la primera quincena (1–15) usa la tasa del día
+          10, la segunda (16 en adelante) la del día 25 — con la tasa de <strong>Compra</strong>, y si
+          esa fecha cae fin de semana o feriado (el Banco Central no publica esos días) se usa el
+          último día hábil anterior. Se cargó el histórico completo (6.701 días hábiles) en un
+          modelo nuevo, <code>hr.exchange.rate.history</code>, vía <code>post_init_hook</code> desde
+          un CSV empaquetado en el módulo — separado a propósito de la tabla de tasas genérica de
+          Odoo, que solo guarda un valor por fecha y la usa toda la instalación, no solo RRHH. La
+          tasa "manual" general también se actualizó al último valor real (26,8532) en las 3
+          empresas. En <code>payroll.payslip</code> se agregaron "Fecha de referencia" (editable,
+          se autocompleta al fijar el periodo) y "Fecha de tasa aplicada" + "Tasa de cambio aplicada"
+          (de solo lectura); el salario en Lempiras de cada línea ahora se calcula con esa tasa, no
+          con la del salario individual. Verificado con 3 casos reales: primera quincena en el
+          navegador, segunda quincena y el caso de fin de semana (10/01/2026, sábado → cae al
+          viernes 09/01/2026) por <code>odoo shell</code>, los tres coincidiendo exacto con el Excel
+          original.</p>
+        <div class="tags"><span class="tag">histórico BCH 2000-2026</span><span class="tag">día 10 / día 25</span><span class="tag">fallback día hábil anterior</span></div>
+      </div>
+      <div class="tl-item" data-n="19">
+        <h3>Contratación: aprobación de candidato pasa de Jefe a RRHH; campos de aprobador bloqueados</h3>
+        <p>Dos ajustes al flujo de <code>hiring.candidate</code> / <code>hiring.request</code>. Primero,
+          <code>action_approve()</code> del candidato (el paso que crea el <code>hr.employee</code> y
+          dispara los documentos de ingreso) ya no exige el grupo Jefe de Departamento — ahora exige
+          <strong>Especialista RRHH</strong>, tanto en el modelo como en el botón "Aprobar" de la vista.
+          Segundo, en "Solicitud de Contratación" los campos "Jefe Solicitante" y "Socio Aprobador"
+          quedaron <code>readonly</code> en todo momento (ya no solo mientras el estado es Borrador) y
+          con <code>options="{'no_open': True}"</code> para que no naveguen al hacer clic — mismo
+          patrón aplicado antes en Permisos Laborales para evitar guardados accidentales. "Jefe
+          Solicitante" sigue siendo siempre el empleado vinculado al usuario que crea la solicitud
+          (autocompletado por <code>default</code>, ya existente); "Socio Aprobador" se sigue llenando
+          solo al momento de <code>action_approve()</code> del socio. Módulo actualizado en Docker
+          (incluye <code>docker restart rrhh_odoo_web</code> por el cambio en <code>hiring_candidate.py</code>)
+          sin errores ni warnings.</p>
+        <div class="tags"><span class="tag">aprobación de candidato: RRHH</span><span class="tag">campos no editables ni clicables</span></div>
+      </div>
+      <div class="tl-item" data-n="20">
+        <h3>Contratación: el perfil se crea al final, con toda la info privada y su documentación</h3>
+        <p>Se rehízo el tramo final del flujo de <code>hiring.candidate</code>. Antes el
+          <code>hr.employee</code> y la solicitud de documentos se creaban al <strong>aprobar</strong>
+          el candidato (estado "Aprobado"), con datos mínimos. Ahora <code>action_approve()</code> solo
+          cambia el estado — no crea nada. Al pasar a <strong>"Contratado"</strong> se siembra la
+          checklist de documentos (DNI) y la <strong>solicitud de contratación
+          (status general) pasa sola a "Contratada"</strong> con ese primer candidato (se quitó el
+          botón manual "Marcar contratada"). En "Contratado" aparece una pestaña nueva,
+          <strong>"Datos para el perfil"</strong>, con toda la información privada del empleado a crear
+          (identidad/DNI, RTN, No. INSS, No. RAP, fecha y lugar de nacimiento, nacionalidad, género,
+          estado civil, dependientes, dirección y contacto privados, contacto de emergencia, formación,
+          fecha de ingreso, departamento/puesto —precargados de la solicitud, editables—, sueldo con
+          pago en USD opcional, y banco + cuenta), más una sub-tabla para <strong>subir la
+          documentación</strong> tipificada. Un botón <strong>"Finalizar y crear perfil"</strong>
+          (solo Especialista RRHH) valida los campos obligatorios —bloquea con la lista de lo que
+          falta— y entonces crea de una vez: el <code>hr.employee</code> con todo mapeado (campos
+          estándar + <code>rrhh_rtn</code>, <code>rrhh_inss_no</code>, <code>rrhh_rap_no</code>,
+          <code>rrhh_education_level</code>, <code>rrhh_emergency_relationship</code>,
+          <code>rrhh_bank_id</code>, <code>rrhh_bank_account_number</code> nuevos), su
+          <code>employee.salary</code> activo, y la <code>employee.document.request</code> volcando las
+          líneas y archivos ya subidos. Los documentos <strong>no</strong> bloquean el finalizado: si
+          falta alguno obligatorio se deja nota en el chatter. El candidato queda en el estado nuevo
+          <strong>"Finalizado"</strong> (6º estado, tras "Contratado"). Modelo nuevo
+          <code>hiring.candidate.document</code> (10º modelo custom) para la documentación previa a que
+          exista el empleado. Verificado por <code>odoo shell</code>: instalación limpia sin
+          errores/warnings, bloqueo por datos faltantes, y creación correcta de empleado + salario +
+          solicitud de documentos con reasignación del status general. Además, un candidato en
+          <strong>"Contratado" o "Finalizado" ya no se puede borrar</strong> (<code>unlink()</code>
+          protegido): en esos estados ya hay proceso de contratación en curso o un perfil creado.
+          Con la solicitud ya en <strong>"Contratada"</strong> tampoco se pueden <strong>agregar
+          nuevos candidatos</strong> (guardado bloqueado en <code>hiring.candidate.create()</code> y
+          botón "Agregar una línea" oculto en la vista); los candidatos existentes siguen abriéndose
+          para finalizar su perfil. Se quitó también la sección <strong>"Currículum"</strong> del
+          candidato (campos <code>cv_attachment</code> / <code>cv_filename</code> eliminados) y en su
+          lugar la <strong>"Documentación"</strong> (la sub-tabla <code>document_ids</code>) subió al
+          cuerpo del formulario, visible en todo momento del proceso — ya no dentro de la pestaña
+          "Datos para el perfil" —, con la línea por defecto (DNI)
+          sembrada al <strong>crear</strong> el candidato, no al contratarlo, para que la
+          documentación se pueda ir subiendo desde el inicio; queda de solo lectura una vez
+          "Finalizado". Cada línea con archivo tiene un botón <strong>"Previsualizar"</strong>, un
+          <em>view widget</em> OWL propio (<code>doc_preview_button</code>, en
+          <code>static/src/js/</code>) que abre el documento en un <strong>popup (modal de
+          Odoo)</strong> — PDF en <code>iframe</code>, imágenes en <code>img</code>, con botones
+          "Descargar" y "Cerrar"; los tipos sin visor se descargan directo. Reúne los bytes según el
+          caso: si el binario está en memoria —recién subido, aún sin guardar— los toma de ahí; si la
+          línea ya está guardada los descarga de <code>/web/content</code>. En ambos casos arma un
+          <code>Blob</code> con el MIME correcto y la <code>objectURL</code> se crea <strong>dentro de
+          <code>onMounted</code></strong>, justo antes de asignarla al elemento (crearla antes deja el
+          visor de PDF de Chrome en blanco). Historial del bug: la 1ª versión era un botón de servidor
+          (<code>ir.actions.act_url</code>) que fallaba con «guarda primero» porque, al editar el
+          candidato como diálogo anidado dentro de la Solicitud, el archivo no llega a la base hasta
+          guardar el formulario padre; la 2ª abría pestaña nueva; la definitiva es el popup, leyendo
+          el archivo directo de memoria. El formulario del candidato se reorganizó en <strong>dos pestañas</strong>
+          — <strong>"Datos del candidato"</strong> (contacto + Documentación, para todos los roles con
+          acceso) y <strong>"Datos para el perfil"</strong> (solo para Especialista RRHH, vía
+          <code>groups=</code> en la pestaña; oculta para Jefe/Socio). El campo "Documento de
+          identidad" del candidato se renombró a <strong>"No. de Identidad (DNI)"</strong> y, al
+          rellenar Correo / Teléfono / DNI del candidato, se <strong>prellenan</strong> "Correo
+          personal", "Teléfono personal" y "No. de Identidad (DNI)" del perfil (onchange + refuerzo
+          en <code>create()</code>/<code>write()</code> para que también funcione si el candidato lo
+          crea un Jefe cuya vista no incluye esos campos; solo rellena si están vacíos, no pisa una
+          edición manual). Se agregó además un paquete de pruebas automáticas
+          (<code>tests/test_hiring_finalize.py</code>, 8 casos <code>TransactionCase</code>) que cubre
+          todo este tramo — aprobar sin crear empleado, siembra de documentos + status general
+          automático, bloqueo por obligatorios, creación de empleado/salario/solicitud de documentos
+          con migración del adjunto, previsualización de documento, prellenado de contacto del perfil,
+          no agregar candidatos con la solicitud contratada, y la protección de borrado — y corren
+          verdes con <code>--test-enable</code> (<code>0 failed, 0 error(s) of 8 tests</code>). Flujo
+          completo verificado también en el navegador con Claude-in-Chrome: <strong>previsualización
+          en popup</strong> (PDF renderizado dentro del modal, tanto de un archivo guardado como de
+          uno recién subido sin guardar, sin el aviso de «guarda primero»), la pestaña "Datos para el
+          perfil" visible para el Especialista RRHH y oculta para el Jefe de Departamento.</p>
+        <div class="tags"><span class="tag">perfil creado en "Finalizado"</span><span class="tag">status general automático</span><span class="tag">2 pestañas: candidato / perfil</span><span class="tag">perfil solo para RRHH</span><span class="tag">previsualizar en popup</span><span class="tag">contacto prellena el perfil</span><span class="tag">bloqueo por campos obligatorios</span><span class="tag">no se borra si está contratado</span><span class="tag">no se agregan candidatos si está contratada</span><span class="tag">8 tests automáticos</span></div>
+      </div>
+      <div class="tl-item" data-n="21">
+        <h3>Checklist de documentos: una sola línea, "DNI"</h3>
+        <p>La checklist que se siembra al crear el candidato tenía 3 líneas por defecto con
+          nomenclatura que no era de Honduras (<code>Cédula</code>, <code>RUC</code>,
+          <code>Carnet INSS</code> — términos de Nicaragua/Panamá). Se redujo a una sola línea,
+          <strong>"DNI"</strong>: <code>DOCUMENT_TYPES_ON_HIRE = ('DNI',)</code> en
+          <code>hiring_candidate.py</code>. Afecta tanto <code>hiring.candidate.document</code> (checklist
+          previa al empleado) como el volcado a <code>employee.document.request</code> al finalizar. Se
+          ajustaron los 3 tests de <code>test_hiring_finalize.py</code> que verificaban esos strings.
+          Sigue pudiéndose agregar más tipos de documento a mano en cada expediente.</p>
+        <div class="tags"><span class="tag">1 línea: DNI</span><span class="tag">nomenclatura HN</span><span class="tag">tests ajustados</span></div>
+      </div>
+      <div class="tl-item" data-n="22">
+        <h3>Candidato: "Aprobar" solo después de "Entrevistado"</h3>
+        <p>Antes se podía aprobar un candidato directamente desde <strong>"Filtrado"</strong>,
+          saltándose la entrevista: <code>action_approve()</code> aceptaba
+          <code>('filtered', 'interviewed')</code> y el botón "Aprobar" era visible en ambos estados.
+          Ahora el paso <strong>"Marcar entrevistado"</strong> es obligatorio: <code>action_approve()</code>
+          solo actúa sobre <code>state == 'interviewed'</code> y el botón "Aprobar" solo aparece en ese
+          estado (<code>invisible="state != 'interviewed'"</code>). El helper <code>_new_candidate</code>
+          de los tests se ajustó para pasar por <code>action_mark_interviewed()</code>; 8/8 tests en verde.</p>
+        <div class="tags"><span class="tag">entrevista obligatoria</span><span class="tag">Filtrado → Entrevistado → Aprobado</span></div>
+      </div>
+      <div class="tl-item" data-n="23">
+        <h3>Candidato: no se agenda entrevista sin fecha</h3>
+        <p>El botón <strong>"Agendar Entrevista"</strong> (paso Filtrado → Entrevistado) ahora
+          permanece oculto mientras <code>interview_date</code> esté vacío
+          (<code>invisible="state != 'filtered' or not interview_date"</code>), y
+          <code>action_mark_interviewed()</code> lanza <code>UserError</code> si se llama sin fecha.
+          Así no se puede avanzar la entrevista sin haberla programado. El helper
+          <code>_new_candidate</code> de los tests fija una <code>interview_date</code> antes de
+          marcar entrevistado; 8/8 en verde. (Los renombres de botones del <code>&lt;header&gt;</code>
+          — "Filtrar", "Agendar Entrevista", "Aprobar", "Contratado", "Finalizar y crear perfil" —
+          los hizo el usuario directo en el XML.)</p>
+        <div class="tags"><span class="tag">interview_date requerido</span><span class="tag">botón oculto + guard de servidor</span></div>
+      </div>
+      <div class="tl-item" data-n="24">
+        <h3>Horas Extra: carga masiva desde el reporte de asistencia semanal</h3>
+        <p>Nuevo asistente <code>employee.overtime.bulk.import</code> (primer wizard real del
+          módulo, en <code>wizard/</code>), botón <strong>"Carga masiva"</strong> en la cabecera de
+          la lista de Horas Extra, visible solo para <strong>Especialista RRHH</strong>. El cliente
+          compartió el archivo real que se sube: un <strong>reporte de asistencia semanal</strong>
+          que exporta el marcador (<code>.xls</code> BIFF antiguo generado por SheetJS; también se
+          acepta <code>.xlsx</code>). No es una lista de horas extra: es una matriz con 3 filas de
+          preámbulo, encabezado de 2 filas y, por empleado, columnas <em>ID</em> (código del
+          marcador), <em>Nombre</em> (solo nombre de pila), <em>Depto.</em>, 7 días ×
+          (Entrada/Salida/Horas) y al final <em>Total Horas</em>, <em>Días Trab.</em>,
+          <em>Dif. vs 44h</em> y <em>Cumplió 44 Hrs</em>. El parser localiza solo la fila de
+          encabezados (busca "ID" + "Nombre"), salta el sub-encabezado y lee hasta la fila
+          "TOTAL:". <strong>Reglas de negocio acordadas:</strong> las horas extra de cada empleado
+          son la columna <strong>"Dif. vs 44h" cuando es positiva</strong> (lo que pasó de la semana
+          legal de 44 h); diferencia ≤ 0 → se omite (no es error). Se crea <strong>un</strong>
+          <code>employee.overtime</code> por empleado, fechado al <strong>inicio de la semana</strong>
+          del reporte (el rango "17 Ago 2026 al 23 Ago 2026" se parsea del subtítulo, con meses en
+          español; hay un campo de fecha manual de respaldo si el encabezado no trae el rango).
+          Registro directo en estado <strong>"Aprobado"</strong> (lo carga RRHH, se salta el flujo
+          de 2 pasos, queda como <code>rrhh_approver_id</code>); el flag de contexto
+          <code>overtime_bulk_import</code> evita que <code>create()</code> notifique al jefe fila
+          por fila. El empleado se resuelve por <strong>nombre aproximado</strong>
+          (<code>=ilike</code> exacto y, si no, <code>ilike</code> con un único resultado);
+          ambigüedad o sin match → fila omitida con motivo (ID + nombre). El valor de la hora se
+          calcula como <code>Salario LPS activo / 194,85</code>; sin salario activo → fila omitida.
+          <code>xlrd</code> se declaró en <code>external_dependencies</code>. El resumen final
+          separa tres cubos: creadas, empleados sin horas sobre 44h, y omitidas por error con la
+          lista. Probado contra el archivo real (BECOSA, semana 17–23 Ago 2026): periodo
+          <code>2026-08-17 → 2026-08-23</code>, encabezado en la fila 4, <strong>12 empleados con
+          Dif. &gt; 0</strong> y 25 sin exceso — coincide exacto con el pie del propio reporte
+          ("Cumplieron: 12 · No cumplieron: 25"). Módulo actualizado en Docker sin errores.</p>
+        <p><strong>Anti-duplicados (agregado tras detectar 24 registros por dos corridas del
+          mismo archivo):</strong> se añadió el campo <code>source</code> a
+          <code>employee.overtime</code> (<code>manual</code> / <code>attendance_import</code>). El
+          wizard busca las horas extra ya cargadas de la misma semana
+          (<code>source='attendance_import'</code> + misma fecha) y <strong>omite</strong> a esos
+          empleados, contándolos aparte en el resumen ("ya cargados"). Un checkbox
+          <strong>"Reemplazar cargas previas de esta semana"</strong> borra esas horas extra
+          previas (solo las de ese origen y fecha) y las vuelve a crear con el archivo nuevo. En la
+          lista de Horas Extra se agregó columna opcional <em>Origen</em>, filtro "Desde reporte de
+          asistencia" y "agrupar por Origen". Los 12 registros de prueba ya existentes se
+          normalizaron a <code>attendance_import</code> y se dedujeron a 1 por empleado.</p>
+        <p><strong>Segundo formato del reporte (el cliente pasó el archivo "ya ordenado con el
+          total de horas extra"):</strong> la nueva versión del <code>.xls</code> quita las
+          columnas <em>Dif. vs 44h</em> y <em>Cumplió 44 Hrs</em>, y ahora la columna
+          <strong><em>Total Horas</em> ya es la suma semanal de horas extra</strong> (las celdas
+          diarias también traen horas extra por día). Además <strong>repite el bloque de
+          encabezados a media hoja</strong> (segunda "página") y no tiene fila "TOTAL:". El parser
+          se hizo <strong>bimodal</strong>: <code>_locate_columns</code> usa <em>Dif. vs 44h</em>
+          si existe, y si no, <em>Total Horas</em> (<code>cols['mode']</code> +
+          <code>cols['value']</code>); la regla de creación es la misma (<code>valor &gt; 0</code>).
+          El recorrido de filas dejó de cortar en "TOTAL:" y ahora <strong>solo procesa filas cuyo
+          <em>ID</em> es numérico</strong> (<code>^\d+$</code>), así ignora los encabezados
+          repetidos y las filas vacías del final. Celdas de total vacías / <code>-</code> / texto
+          (INCAPACITADO, etc.) → empleado sin horas extra, omitido. Probado con el archivo
+          reordenado: modo <code>total</code>, columna 24, <strong>32 empleados con total &gt; 0</strong>
+          y 4 sin total (Elvis, Kenneth, Merlin, Samir). Módulo actualizado en Docker sin errores.</p>
+        <div class="tags"><span class="tag">reporte de asistencia .xls/.xlsx</span><span class="tag">bimodal: Total Horas / Dif. vs 44h</span><span class="tag">encabezado repetido tolerado</span><span class="tag">1 registro/semana, fecha = inicio</span><span class="tag">match por nombre</span><span class="tag">crea en "Aprobado"</span><span class="tag">solo Especialista RRHH</span><span class="tag">anti-duplicados por semana + Reemplazar</span></div>
+      </div>
+      <div class="tl-item" data-n="25">
+        <h3>Datos de prueba: los 37 empleados del reporte BECOSA</h3>
+        <p>Para poder probar la carga masiva de punta a punta se crearon en <strong>Empresa
+          Energía</strong> los 37 empleados que aparecen en el reporte de asistencia de ejemplo
+          (nombres tal cual vienen en el archivo: "Ramon alvarenga", "Merlin carcamo", etc.), cada
+          uno con un <code>employee.salary</code> activo de prueba (500 USD ≈ 13 400 L → valor hora
+          <strong>68,77 L</strong>). Los 12 con <em>Dif. vs 44h</em> positiva hacen match único por
+          nombre, así que una carga real del archivo crea 12 horas extra fechadas al 2026-08-17.</p>
+        <div class="tags"><span class="tag">37 empleados BECOSA</span><span class="tag">salario de prueba activo</span></div>
+      </div>
+      <div class="tl-item" data-n="26">
+        <h3>Horas extra con recargo por tipo de jornada (Código del Trabajo de Honduras)</h3>
+        <p>La planilla ahora aplica el recargo legal sobre el valor de la hora ordinaria según el
+          tipo de jornada. <strong>Nuevo campo <code>journey_type</code> en
+          <code>employee.overtime</code></strong> con 5 opciones — Jornada Diurna, Mixta, Nocturna,
+          Prolongación y Días libres o feriados (default <em>Diurna</em>). Los <strong>porcentajes
+          son configurables por empresa</strong>: 5 campos nuevos en <code>res.company</code>,
+          pestaña "Planilla (RRHH)" → "Recargos de horas extra por jornada (%)", con defaults
+          <strong>25 / 50 / 75 / 100 / 100</strong>. El monto de cada <code>employee.overtime</code>
+          pasó de <code>horas × valor hora</code> a <code>horas × valor hora × (1 + recargo/100)</code>,
+          leyendo el % de la empresa según el <code>journey_type</code> (se guarda también el
+          <code>surcharge_percentage</code> aplicado, de solo lectura). En
+          <code>payroll.line</code> se reemplazó la única columna "Horas extra" por <strong>5
+          columnas de horas por tipo de jornada</strong> (<code>overtime_hours_diurna</code> …
+          <code>_feriado</code>, calculadas agrupando las horas extra aprobadas del periodo por
+          <code>journey_type</code>) más el total y el "Monto horas extra" (suma de los montos ya
+          con recargo). El wizard de carga masiva agrega un selector <strong>"Tipo de jornada"</strong>
+          (default Diurna) que se aplica a todo el lote, ya que el reporte de asistencia no
+          distingue jornadas; se ajusta después registro por registro. Verificado en Docker:
+          empresa con 25/50/75/100/100; los 12 registros de prueba existentes se rellenaron a
+          <em>Diurna</em> y su monto recalculó a ×1,25 (ej. Jorge Zaldivar 2,64 h × 68,77 × 1,25 =
+          226,94); planilla de prueba Ago-2026 con las 5 columnas pobladas y el monto correcto.</p>
+        <div class="tags"><span class="tag">journey_type en employee.overtime</span><span class="tag">recargos 25/50/75/100/100 por empresa</span><span class="tag">5 columnas de horas en la planilla</span><span class="tag">monto = horas × valor hora × (1+recargo)</span><span class="tag">wizard: tipo de jornada del lote</span></div>
+      </div>
+      <div class="tl-item" data-n="27">
+        <h3>Clasificación automática del tipo de jornada al importar</h3>
+        <p>El reporte de asistencia trae las horas extra "revueltas" sin distinguir jornada. Ahora
+          la carga masiva las <strong>clasifica sola, día por día</strong>. El wizard dejó de crear
+          un registro semanal por empleado: lee cada bloque diario (Entrada / Salida / Horas del
+          reporte), determina el tipo de jornada de cada día y crea <strong>un
+          <code>employee.overtime</code> por empleado y por tipo de jornada</strong>.</p>
+        <p><strong>Cantidad vs. reparto:</strong> el cliente confirmó que la columna
+          <em>"Total Horas"</em> es la <strong>cantidad real de horas extra</strong> del empleado en
+          la semana. Por eso esa cifra manda: el detalle diario solo define <strong>en qué
+          proporción</strong> se reparten esas horas entre tipos de jornada, y el reparto se
+          <strong>escala</strong> para que la suma cuadre exacto con "Total Horas" (en el archivo
+          BECOSA el detalle diario venía ~4 h por encima; ya no genera avisos, solo una línea
+          informativa de cuántos empleados se escalaron). Tras escalar, cada parte se redondea a 2
+          decimales y <strong>el residuo del redondeo se carga a la parte mayor</strong>, así el
+          desglose diurna + mixta + nocturna + prolongación + feriado <strong>siempre suma
+          exactamente "Total Horas"</strong> (verificado: 32/32 empleados con total cuadran al
+          centavo). Si la celda "Total Horas" viene vacía, ese empleado se omite (sin horas extra).</p>
+        <p><strong>Reglas de clasificación (definición del cliente, no la legal genérica):</strong>
+          domingo o feriado → todo <strong>Feriado (100%)</strong>. El resto se reparte por
+          <strong>bandas horarias</strong> contadas desde el fin de jornada: hasta las
+          <strong>19:00 → Diurna (25%)</strong>, <strong>19:00–22:00 → Mixta (50%)</strong>,
+          <strong>22:00–05:00 → Nocturna (75%)</strong>, <strong>de las 05:00 del día siguiente en
+          adelante → Prolongada (100%)</strong> (trabajar toda la noche). Las tres cotas
+          (19:00 / 22:00 / 05:00) son <strong>configurables por empresa</strong>. Un mismo día se
+          <strong>parte en varios tipos</strong>: la ventana [fin de jornada, salida] se solapa con
+          cada banda y esas horas son los pesos; el reporte pone la cantidad y se escala a
+          "Total Horas". Jornada ordinaria también configurable: inicio (07:00), fin lun-vie
+          (17:00), <strong>fin sábado (12:00)</strong>; el fin <strong>se corre si el empleado entra
+          tarde</strong> (<code>max(entrada, inicio) + duración</code>). Salida ilegible
+          (<code>?</code> / <code>-</code>) → todo <strong>Diurna</strong>. Entrada antes de hora
+          (H.E. matutina) → Nocturna si es antes de las 05:00, si no Diurna.</p>
+        <p>Nuevo modelo <code>payroll.holiday</code> (fecha, descripción, empresa opcional) con menú
+          <strong>RRHH → Feriados</strong>, editable. Empieza <strong>vacío</strong> — RRHH carga
+          los feriados que apliquen; los domingos se detectan solos. El resumen del wizard separa
+          creados / sin horas extra / escalados / duplicados / errores. <strong>Probado con el
+          archivo BECOSA real (bandas 19/22/05):</strong> 32 empleados, 94 registros, 0 errores, 0
+          avisos, 0 descuadres; cada empleado suma exacto su "Total Horas" (Ramon 12,80 diurna +
+          2,81 mixta + 1,39 nocturna = 17,00). Esta semana sin prolongación ni feriado (nadie pasó
+          de las 05:00 ni trabajó domingo con horas).</p>
+        <div class="tags"><span class="tag">clasificación día por día</span><span class="tag">"Total Horas" = cantidad real (manda)</span><span class="tag">bandas 17-19 / 19-22 / 22-05 / 05+ configurables</span><span class="tag">un día se parte en varios tipos</span><span class="tag">prolongación automática (pasar de 5 AM)</span><span class="tag">domingo/feriado → 100%</span><span class="tag">sábado ordinario hasta 12:00</span><span class="tag">payroll.holiday (lista vacía, la carga RRHH)</span></div>
+      </div>
+      <div class="tl-item" data-n="28">
+        <h3>Limpieza de empleados duplicados de prueba en Empresa Energía</h3>
+        <p>Al crear una planilla salía el aviso <em>"sin salario activo vigente"</em> para varios
+          "Jason Torres". Había <strong>4 registros de <code>hr.employee</code> duplicados</strong>
+          creados a mano en distintas fechas de prueba (ids 21, 29, 31 "Jason Torres" y 33 "preuba
+          nombre"), ninguno con el usuario real. Se conservó solo el vigente (<strong>id 32
+          "Jason"</strong>, vinculado a <code>jtorres@grupoelectric.com</code>). Como estaban
+          referenciados en planillas borrador, permisos y solicitudes de contratación, la limpieza
+          fue por SQL en una transacción: las referencias de gestión (solicitante/aprobador de
+          contratación, preparó/aprobó planilla, aprobador de permisos y horas extra) se
+          <strong>reasignaron al id 32</strong>; los datos propios de los duplicados (28 líneas de
+          planilla borrador, 4 solicitudes de documentos, 1 <code>employee.salary</code>, 3 saldos
+          de vacaciones, sus <code>resource.resource</code>) se borraron. Verificado: Empresa
+          Energía queda con 45 empleados activos, todos con salario activo, y una planilla nueva
+          genera 45 líneas sin omitidos. Sigue existiendo un <code>id 1 "Jason"</code>
+          <strong>archivado</strong> en Sunergy (inactivo, sin datos) que no molesta.</p>
+        <div class="tags"><span class="tag">4 empleados duplicados eliminados</span><span class="tag">referencias reasignadas al vigente</span><span class="tag">limpieza SQL transaccional</span><span class="tag">aviso "sin salario activo" resuelto</span></div>
+      </div>
+      <div class="tl-item" data-n="29">
+        <h3>Feriados trabajados e Incapacidad ya se reflejan en la planilla</h3>
+        <p>Se planeó y confirmó con el cliente la regla antes de tocar código. Reglas
+          acordadas: Vacaciones, Permiso Especial y Permiso Laboral se pagan con goce (no
+          descuentan); <strong>Incapacidad</strong> — los primeros <strong>3 días de cada
+          incapacidad</strong> (contados desde el inicio de <em>esa</em> incapacidad, no del
+          periodo) los paga la empresa al 100%, del <strong>4º día en adelante los cubre el
+          IHSS</strong> y se descuentan de "Días trabajados"; y <strong>trabajar un feriado o
+          domingo se paga doble</strong> ese día, detectado automáticamente si el empleado marcó
+          entrada esa fecha en el reporte de asistencia.</p>
+        <p><strong>Modelo nuevo <code>payroll.holiday.worked</code></strong> (empleado, fecha,
+          empresa, feriado, origen) — menú <strong>RRHH → Feriados trabajados</strong>, editable a
+          mano y poblado solo por el wizard de carga masiva: por cada día de la fila (haya o no
+          horas extra), si la fecha es domingo o está en <code>payroll.holiday</code> y hay marca
+          de Entrada, se crea el registro (evita duplicados). En <code>payroll.line</code>, dos
+          pares de campos automáticos (recalculan igual que horas extra/IHSS/RAP):
+          <code>incapacity_unpaid_days</code> (vía <code>labor.permission</code> tipo
+          <em>incapacidad</em> aprobada, día 4+ de cada una, intersectado con el periodo) resta de
+          "Días trabajados" al generar/regenerar líneas; <code>holiday_worked_days</code> +
+          <code>holiday_extra_pay</code> (= 1 día de salario extra por cada feriado trabajado, vía
+          <code>employee.rrhh_holiday_worked_ids</code>) se suman a <code>total_to_pay</code>.
+          Verificado con datos de prueba (rollback, no quedaron en la base): incapacidad de 5 días
+          → 2 días sin goce, días trabajados de 16→14 correctamente; feriado de prueba trabajado →
+          1 día extra de salario (L. 446,67 = salario/30) sumado al total; y con el archivo BECOSA
+          real + un feriado simulado un miércoles de esa semana, el wizard creó 31 registros de
+          "feriado trabajado" ese día y reclasificó automáticamente las horas extra de ese día
+          como "feriado" (100%) en vez de diurna/mixta/nocturna — sin tocar el código del wizard,
+          la misma lógica de <code>_classify_day</code> ya lo cubre.</p>
+        <div class="tags"><span class="tag">incapacidad: 3 días empresa, 4º+ IHSS</span><span class="tag">feriado trabajado = doble</span><span class="tag">payroll.holiday.worked</span><span class="tag">automático al generar planilla</span><span class="tag">verificado con rollback</span></div>
+      </div>
+      <div class="tl-item" data-n="30">
+        <h3>Incapacidad: reparto real 34% empresa / 66% IHSS, con techo de RAP; y "Recalcular días" en Planillas</h3>
+        <p>Se afinó la regla de incapacidad del punto anterior con un caso real que planteó el
+          cliente (incapacidad que empieza cerca del cambio de quincena, ej. día 28, y cruza a la
+          planilla siguiente). RRHH confirmó el cálculo correcto de los días 4+ de cada incapacidad:
+          ya no se tratan como "sin goce" a secas — <strong>la empresa paga 34%</strong> y
+          <strong>el IHSS 66%</strong> del salario diario, ambos <strong>con techo de L11.903,13</strong>
+          (el mismo techo que ya existía para RAP, reutilizado); si el salario diario real supera ese
+          techo, la empresa además paga el 100% del excedente. <code>incapacity_to_pay</code> pasó de
+          campo manual a <strong>calculado</strong> con esa fórmula; se agregó
+          <code>incapacity_ihss_pay</code> (informativo, no se suma a ningún total — lo paga el IHSS
+          directo al empleado). Los porcentajes 34/66 quedaron fijos en código (no configurables por
+          empresa, por instrucción del cliente). Se descubrió en el camino que <code>días_worked</code>
+          no se resincroniza solo cuando una incapacidad se aprueba <em>después</em> de que la línea
+          de planilla ya existía (el campo es editable a mano, no depende de la incapacidad) — sin
+          corregirlo se pagaría el sueldo completo <strong>y</strong> la incapacidad por los mismos
+          días. Se agregó el botón <strong>"Recalcular días"</strong> en el header de la planilla
+          (borrador, Especialista RRHH) que reajusta "Días trabajados" de todas las líneas contra las
+          incapacidades aprobadas del periodo. Verificado en el navegador: se forzó el valor "dañado"
+          (15 en vez de 4) para simular el escenario, se confirmó el pago doble (total inflado en
+          L5.907,40), y un clic en "Recalcular días" lo corrigió solo, sin tocar nada a mano.</p>
+        <div class="tags"><span class="tag">34% empresa / 66% IHSS</span><span class="tag">techo compartido con RAP</span><span class="tag">botón Recalcular días</span><span class="tag">evita pago doble</span></div>
+      </div>
+      <div class="tl-item" data-n="31">
+        <h3>Vacaciones reflejadas en Planilla (informativo) e incapacidad exige comprobante</h3>
+        <p>Dos ajustes menores al mismo bloque. Primero, <strong>vacaciones</strong> ya aparecen en
+          la planilla como columna informativa (<code>vacation_days_taken</code>): días de
+          "Vacaciones" aprobadas dentro del periodo, sin afectar ningún cálculo — se pagan con goce,
+          ya incluidos en "Días trabajados" sin descontarse, la columna es solo para que quede
+          visible en la planilla quién estuvo de vacaciones. Segundo, por regla del cliente,
+          <strong>una Ausencia por Incapacidad ya no se puede solicitar sin justificación y sin
+          adjuntar el comprobante</strong> (constancia del IHSS u orden médica): ambos campos quedan
+          <code>required</code> en la vista cuando el tipo es "incapacidad", y un
+          <code>@api.constrains</code> en el modelo blinda la regla también contra creación por API,
+          no solo desde el formulario. El adjunto de Permisos Laborales ahora también usa el mismo
+          widget "Previsualizar" (en modo compacto, solo ícono) que Documentación de Candidatos —
+          se generalizó <code>doc_preview_button</code> para que sirva en cualquier modelo
+          (usaba el nombre de modelo fijo antes), y se ocultó el botón nativo de "Descargar" del
+          campo porque el popup de previsualización ya trae el suyo.</p>
+        <div class="tags"><span class="tag">vacaciones: columna informativa</span><span class="tag">incapacidad exige adjunto + justificación</span><span class="tag">previsualizar reutilizado</span></div>
+      </div>
+      <div class="tl-item" data-n="32">
+        <h3>Segundo empleado bajo Carlos Méndez, para probar el flujo de aprobación con 2 subordinados</h3>
+        <p>El organigrama de prueba solo tenía un Jefe de Departamento (Carlos Méndez, Ventas) con
+          una sola empleada a cargo (Laura Gómez), insuficiente para probar bien el flujo de permisos
+          laborales con más de un subordinado. Se creó <strong>Diego Fernandez</strong> — empleado
+          nuevo en Ventas, mismo jefe (<code>parent_id</code> = Carlos Méndez) — con su usuario de
+          prueba correspondiente (grupo <em>Empleado</em> únicamente, sin permisos extra). Con esto el
+          organigrama de Empresa Energía queda: Roberto Salinas (Gerente General) → Carlos Méndez
+          (Jefe de Depto. Ventas) → Laura Gómez y Diego Fernandez (Vendedores). Nota aparte: ya
+          existía un tercer empleado, "Pedro Ramirez", reportando también a Carlos — pero es uno de
+          los 37 empleados de prueba cargados para la carga masiva de horas extra (sin usuario de
+          login), no un perfil pensado para probar roles.</p>
+        <div class="tags"><span class="tag">2 empleados bajo 1 jefe</span><span class="tag">diego.fernandez@empresaenergia.test</span></div>
+      </div>
+      <div class="tl-item" data-n="33">
+        <h3>Contratación: sueldo separado en Lempiras y en Dólares en el perfil del candidato</h3>
+        <p>En la pestaña "Datos para el perfil" del candidato (bloque <strong>"Datos laborales y
+          pago"</strong>), el campo único "Sueldo" se dividió en dos: <code>profile_wage</code> pasó a
+          llamarse <strong>"Sueldo en Lempiras"</strong> (sigue siendo <code>Monetary</code> en moneda
+          de la empresa, informativo) y se agregó <code>profile_wage_usd</code> —
+          <strong>"Sueldo en Dólares"</strong> (<code>Float</code>). Como <code>employee.salary</code>
+          guarda el <code>base_salary</code> en USD, ahora <code>_create_salary()</code> toma el valor
+          de "Sueldo en Dólares" en vez del de Lempiras, y la validación de finalización
+          (<code>PROFILE_REQUIRED_FIELDS</code> / <code>_check_profile_complete</code>) exige
+          "Sueldo en Dólares" &gt; 0. Tests de finalización actualizados para fijar ambos campos.</p>
+        <div class="tags"><span class="tag">profile_wage_usd</span><span class="tag">base_salary = USD</span><span class="tag">2 campos de sueldo</span></div>
+      </div>
+      <div class="tl-item" data-n="34">
+        <h3>Planilla: "Total neto a pagar" también en dólares</h3>
+        <p>El encabezado de <code>payroll.payslip</code> ya mostraba <strong>"Total neto a pagar"</strong>
+          solo en Lempiras. Se agregó <code>total_net_usd</code> — <strong>"Total neto a pagar (USD)"</strong>,
+          calculado en el mismo <code>_compute_totals</code>: <code>total_net / exchange_rate_value</code>
+          (la tasa de compra del BCH ya aplicada a esta planilla, la misma con la que se convierte a
+          Lempiras el salario en USD de cada línea); si por algún motivo no hay tasa resuelta para el
+          periodo, cae a la conversión genérica <code>res.currency</code> a la fecha de fin de periodo.
+          Visible en el formulario junto a "Total neto a pagar" y como columna opcional en la lista de
+          planillas.</p>
+        <div class="tags"><span class="tag">total_net_usd</span><span class="tag">= total_net / tasa BCH</span><span class="tag">fallback res.currency</span></div>
+      </div>
+      <div class="tl-item" data-n="35">
+        <h3>Planilla: botones explícitos de Guardar y Cancelar</h3>
+        <p>Se agregaron al <code>&lt;header&gt;</code> del formulario de <code>payroll.payslip</code> dos
+          botones. <strong>"Guardar"</strong> es <code>special="save"</code> (resaltado). El de
+          <strong>"Cancelar"</strong> arrancó como <code>special="cancel"</code> (descartar cambios sin
+          guardar) pero el cliente lo quería como <em>anular</em> la planilla: ahora es un botón
+          <code>type="object"</code> que llama <code>action_cancel_draft()</code> —
+          <strong>elimina por completo la planilla</strong> (<code>unlink</code>), con diálogo de
+          confirmación (<code>confirm=</code>), visible solo en estado <strong>Borrador</strong> y solo
+          para <strong>Especialista RRHH</strong>; al borrar redirige al listado de Planillas.
+          Verificado por <code>odoo shell</code> como usuario Especialista (crea borrador → cancelar →
+          deja de existir → devuelve la acción del listado) y en el navegador (aparece el diálogo
+          "¿Anular esta planilla en borrador?…"). El resto de vistas del módulo sigue usando solo los
+          controles nativos.</p>
+        <div class="tags"><span class="tag">Guardar = special="save"</span><span class="tag">Cancelar = anula/elimina el borrador</span><span class="tag">confirm + solo Borrador + solo RRHH</span></div>
+      </div>
+      <div class="tl-item" data-n="36">
+        <h3>Planilla: "Neto en $" por línea siempre calculado y tabla paginada de a 10</h3>
+        <p>Dos ajustes a la tabla de líneas (<code>payroll.line</code>) del formulario de planilla.
+          <strong>"Neto en $"</strong> (<code>net_to_pay_usd</code>) antes solo se calculaba para
+          empleados con <em>Pago en cuenta de dólares</em> (<code>pays_in_usd</code>); para el resto
+          quedaba en 0 y la columna parecía vacía. Ahora se calcula <strong>siempre</strong>:
+          <code>net_to_pay / exchange_rate_value</code> (la misma tasa de compra del BCH del periodo
+          que usa la planilla), con <em>fallback</em> a la conversión genérica de <code>res.currency</code>
+          a la fecha de fin de periodo. La columna dejó de ser opcional — se muestra fija. Además la
+          tabla de empleados quedó con <strong>paginado de 10 líneas</strong> (<code>limit="10"</code>
+          en el <code>&lt;list&gt;</code> del One2many).</p>
+        <div class="tags"><span class="tag">net_to_pay_usd siempre calculado</span><span class="tag">= neto / tasa BCH</span><span class="tag">columna fija</span><span class="tag">limit="10"</span></div>
+      </div>
+      <div class="tl-item" data-n="37">
+        <h3>Planilla: columnas secundarias ocultas por defecto, activables con check</h3>
+        <p>En la tabla de líneas de la planilla, seis columnas pasaron a <code>optional="hide"</code>:
+          <strong>"Días de incapacidad"</strong>, <strong>"Bonificación"</strong>,
+          <strong>"Incapacidad a pagar"</strong>, <strong>"Feriados trabajados"</strong>,
+          <strong>"Pago extra por feriado"</strong> y <strong>"Vacaciones"</strong> (encabezados
+          acortados: antes "Días de incapacidad (día 4+)" y "Vacaciones en el periodo"). Ya no aparecen
+          de entrada; cada una se activa desde el selector de columnas opcionales (ícono de
+          deslizadores al final de la fila de encabezados de la tabla, no la tuerca del título) y al
+          marcarla se muestra con su cálculo. Sus valores se
+          siguen computando aunque la columna esté oculta. <strong>Reordenar columnas arrastrándolas
+          no es algo que la vista lista de Odoo 18 permita de fábrica</strong> — el selector de
+          columnas opcionales es el mecanismo nativo para elegir qué se ve; el drag-and-drop de
+          encabezados requeriría un widget JS propio (pendiente, si se confirma que hace falta).</p>
+        <div class="tags"><span class="tag">6 columnas optional="hide"</span><span class="tag">check para mostrarlas</span><span class="tag">reordenar por drag: no nativo</span></div>
+      </div>
+      <div class="tl-item" data-n="38">
+        <h3>Fix de instalación limpia: el menú raíz se definía tarde</h3>
+        <p>En una instalación desde cero fallaba con <code>ValueError: External ID not found:
+          odoo_rrhh_custom.menu_rrhh_custom_root</code>. El menú raíz
+          <code>menu_rrhh_custom_root</code> estaba declarado en
+          <code>views/hiring_request_views.xml</code>, que el manifest carga <em>después</em> de
+          <code>payroll_holiday_views.xml</code> (que lo usa como <code>parent</code>). En dev nunca
+          se vio porque el menú ya existía en la base de instalaciones previas y los <code>-u</code>
+          lo resuelven. Se movió la definición a <code>data/menu.xml</code>, listado en el manifest
+          justo después de <code>security/</code> y antes de todas las vistas. Verificado con
+          instalación limpia en base nueva.</p>
+        <div class="tags"><span class="tag">data/menu.xml</span><span class="tag">orden de carga</span><span class="tag">instalación limpia OK</span></div>
+      </div>
+      <div class="tl-item" data-n="39">
+        <h3>El administrador del sistema ve y gestiona todo el RRHH</h3>
+        <p>El usuario admin (grupo <em>Ajustes</em>, <code>base.group_system</code>) no veía ningún
+          menú ni registro del módulo: todos los menús exigen un grupo RRHH y las ACL solo cubren
+          esos grupos; <code>base.group_system</code> no saltea ACL ni reglas en Odoo (solo lo hace
+          el superusuario real). Se agregó <code>implied_ids</code> en <code>base.group_system</code>
+          → <code>group_rrhh_especialista</code>: ese grupo ya tiene ACL completa sobre los 17
+          modelos, aparece en la lista <code>groups=</code> de todos los menús y no lo apunta
+          ninguna <code>ir.rule</code> restrictiva (las de "solo los míos" son solo para
+          <code>group_rrhh_empleado</code>). Los demás usuarios no cambian; la gestión de grupos y
+          la asignación de roles ya es nativa de <em>Ajustes</em>. <code>version 18.0.1.0.1</code>.</p>
+        <div class="tags"><span class="tag">base.group_system implica Especialista</span><span class="tag">sin tocar a otros roles</span></div>
+      </div>
+      <div class="tl-item" data-n="40">
+        <h3>Rol nuevo "Planillas" (solo ese apartado); RRHH lee la ficha completa del empleado</h3>
+        <p>Grupo nuevo <code>group_rrhh_planillas</code>: ve y opera <strong>únicamente</strong> el
+          menú "Planillas" (<code>payroll.payslip</code> / <code>payroll.line</code>), con las ACL
+          de lectura mínimas que necesitan los cálculos (salario individual, horas extra, feriados
+          trabajados). Agregado a <code>menu_payroll_payslip</code> y a los botones "Pasar a
+          Observación" y "Recalcular días". Además, <code>group_rrhh_especialista</code> y
+          <code>group_rrhh_planillas</code> ahora implican <code>hr.group_hr_user</code>: el flujo de
+          contratación y de planilla lee campos de la ficha del empleado (fecha de ingreso, RTN,
+          banco, feriados trabajados, horas extra) que no están en el perfil "público" de
+          <code>hr.employee</code> — sin esto un usuario de RRHH que no fuera admin recibía
+          <code>AccessError</code> al generar una planilla. Verificado: un usuario solo con
+          "Planillas" genera y calcula una planilla de 45 líneas sin error y no puede abrir
+          Contratación/Candidatos. <code>version 18.0.1.0.2</code>.</p>
+        <div class="tags"><span class="tag">group_rrhh_planillas</span><span class="tag">solo el menú Planillas</span><span class="tag">RRHH implica hr.group_hr_user</span></div>
+      </div>
+      <div class="tl-item" data-n="41">
+        <h3>Ambiente de prueba: despliegue en VM Debian sobre Proxmox</h3>
+        <p>Se llevó el módulo a un ambiente de prueba accesible por enlace. Repo en GitHub
+          (<code>jtorres-grupoElectric/Odoo_dev</code>) con el módulo más los archivos de
+          despliegue: <code>Dockerfile</code> (<code>odoo:18.0</code> + <code>xlrd</code>),
+          <code>docker-compose.prod.yml</code> (Odoo + PostgreSQL 15) y <code>config/odoo.conf</code>
+          (<code>list_db=False</code>, <code>dbfilter</code> a <code>odoo18_prueba</code>). Corre en
+          una VM Debian sobre un servidor Proxmox; se accede por <code>http://IP:8069</code> (sin
+          dominio ni HTTPS — riesgos asumidos para datos de prueba desechables). Base
+          <strong>limpia</strong>: solo se instala el módulo (el <code>post_init_hook</code> carga
+          los 105 puestos, 13 departamentos y el histórico de tasas del BCH). Se cambió la moneda de
+          <em>Empresa Energía</em> de USD a <strong>HNL</strong> (Lempira) — el default de Odoo en
+          instalación nueva es USD y toda la planilla asume Lempiras.
+          <code>scripts/seed_prueba.sh</code> siembra 5 empleados con salario individual y dos
+          usuarios de rol: <strong>Laura Dominguez</strong> (Especialista RRHH, acceso total) y
+          <strong>Yenny Hernandez</strong> (Planillas, solo ese apartado).</p>
+        <div class="tags"><span class="tag">VM Debian / Proxmox</span><span class="tag">repo GitHub + compose prod</span><span class="tag">moneda HNL</span><span class="tag">seed_prueba.sh</span></div>
+      </div>
+      <div class="tl-item" data-n="42">
+        <h3>Permisos por apartado: una casilla por cada sección del módulo</h3>
+        <p>Odoo no tiene un árbol "módulo → submódulos" con checks; el acceso se da por
+          <strong>grupos</strong>. Se agregaron cinco grupos independientes —
+          <code>group_rrhh_contratacion</code>, <code>_salarios</code>, <code>_horas_extra</code>,
+          <code>_feriados</code>, <code>_permisos</code> — todos en la categoría "RRHH Custom" y
+          <strong>sin jerarquía entre sí</strong>, así que en el formulario del usuario aparecen como
+          <strong>casillas que se marcan por separado</strong> (además de "Especialista RRHH" = todo,
+          y los ya existentes "Planillas", "Empleado", "Jefe", "Socio"). Cada grupo habilita
+          <strong>solo el menú de su apartado</strong> y las ACL de sus modelos (p. ej. Salarios →
+          <code>employee.salary</code>; Feriados → <code>payroll.holiday</code> +
+          <code>payroll.holiday.worked</code>). Todos implican <code>hr.group_hr_user</code> porque
+          cualquier apartado de RRHH termina leyendo la ficha del empleado — efecto colateral: el
+          usuario también ve la app estándar "Empleados". Los <strong>botones de flujo sensibles</strong>
+          (enviar a aprobación, aprobar candidato, finalizar perfil, aprobar planilla, anular)
+          siguen reservados a Especialista / Jefe / Socio; estos roles por apartado sirven para
+          <strong>ver y gestionar los registros</strong> de su sección. Verificado en dev: cada rol
+          accede solo a los modelos de su apartado, sin fuga a los demás. <code>version 18.0.1.0.3</code>.</p>
+        <div class="tags"><span class="tag">5 grupos = 5 casillas</span><span class="tag">1 apartado = 1 grupo</span><span class="tag">flujos sensibles siguen restringidos</span></div>
+      </div>
+      <div class="tl-item" data-n="43">
+        <h3>Salario individual: "Salario LPS" ahora usa la tasa del Banco Central, no la genérica de Odoo</h3>
+        <p>En el ambiente de prueba (<code>odoo18_prueba</code>) los salarios mostraban
+          <strong>"Salario LPS" = "Salario en USD"</strong> sin convertir (700 USD → 700 LPS). El
+          diagnóstico (<code>scripts/diagnostico_tasa.sh</code>, nuevo, solo lectura) confirmó la
+          causa: <code>employee.salary</code> convertía con <code>res.currency._convert()</code>, es
+          decir la tabla genérica de Odoo (<code>res.currency.rate</code>), que en esa base estaba
+          <strong>vacía</strong> — sin fila para USD ni HNL — así que <code>_convert</code> devolvía
+          factor 1,0. Esa tabla solo la siembra el <code>post_init_hook</code>, que corre en
+          <code>-i</code> (instalación limpia), no en <code>-u</code>; prueba se había actualizado
+          desde una versión previa a la función de tipo de cambio. La tabla del Banco Central
+          (<code>hr.exchange.rate.history</code>) sí estaba completa (6.701 filas, hasta 2026-08-27).
+          <strong>Fix:</strong> <code>_compute_base_salary_lps</code> y <code>_compute_net_salary_usd</code>
+          ahora resuelven la tasa con <code>hr.exchange.rate.history.get_buy_rate_on_or_before(fecha
+          efectiva)</code> — la <strong>misma fuente y método que Planilla</strong> —, eliminando la
+          dependencia de la tabla que nadie mantiene. LPS = USD × tasa de compra; USD = LPS ÷ tasa.
+          Se agregó el helper <code>_get_usd_buy_rate()</code> y se quitó <code>_get_conversion_context()</code>
+          (ya no hace falta la moneda de la empresa). El <code>post_init_hook</code> que actualiza la
+          tasa "manual" genérica queda solo para conversiones de Odoo fuera del módulo.
+          <code>version 18.0.1.0.4</code>.</p>
+        <div class="tags"><span class="tag">misma fuente que Planilla</span><span class="tag">sin dependencia de res.currency.rate</span><span class="tag">diagnostico_tasa.sh</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Mapa de modelos</h2>
+    <p class="section-note">Cómo se conectan los 9 modelos custom entre sí y con <code>hr.employee</code>.</p>
+    <div class="diagram-card">
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph TD
+  AG["employment.agency<br/>Agencia de empleo"] --> HC
+  HR["hiring.request<br/>Solicitud de contratación"] --> HC["hiring.candidate<br/>Candidato"]
+  HC -- "al finalizar (RRHH)" --> EMP["hr.employee<br/>Empleado"]
+  HC -- "al finalizar genera" --> DOC["employee.document.request<br/>Documentos de ingreso"]
+  HC --> HCD["hiring.candidate.document<br/>Documentación del candidato"]
+  HCD -. "se vuelca a" .-> DOC
+  EMP --> SAL["employee.salary<br/>Salario individual"]
+  EMP --> VAC["employee.vacation.allocation<br/>Saldo de vacaciones"]
+  EMP --> LP["labor.permission<br/>Permisos / Vacaciones"]
+  EMP --> OT["employee.overtime<br/>Horas extra"]
+  LP -. "aprobadas cuentan como" .-> VAC
+  SAL -. "define valor hora" .-> OT
+        </pre>
+      </div>
+    </div>
+
+    <div class="diagram-card">
+      <h3><span class="num">→</span> Catálogo de Departamentos y Puestos (nuevo)</h3>
+      <p class="caption">Cargado una sola vez desde el PDF real del cliente; sin empresa asignada, así sirve a las 3.</p>
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph LR
+  PDF["Perfiles de Puestos<br/>25.02.2026.pdf (105 puestos)"] -- "se consolida en" --> DEPT["13 hr.department<br/>company_id vacío"]
+  DEPT -- "cada puesto pertenece a uno" --> JOB["105 hr.job"]
+  DEPT -- "elegido primero" --> REQD["hiring.request.department_id"]
+  REQD -- "onchange: filtra y<br/>limpia si no coincide" --> REQJ["hiring.request.job_profile_id"]
+  JOB -. "dominio: mismo departamento" .-> REQJ
+        </pre>
+      </div>
+    </div>
+
+    <div class="diagram-card">
+      <h3><span class="num">→</span> Tasa de cambio por quincena en Planilla (nuevo)</h3>
+      <p class="caption">Histórico real del Banco Central de Honduras (6.701 días hábiles, 2000-2026), Compra únicamente.</p>
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph LR
+  XLS["Excel BCH<br/>Compra/Venta diaria"] -- "carga una vez<br/>(post_init_hook)" --> HIST["hr.exchange.rate.history<br/>6.701 filas"]
+  PS["payroll.payslip.period_start"] -- "1-15 -> dia 10<br/>16-31 -> dia 25" --> REF["exchange_rate_date<br/>(referencia, editable)"]
+  REF -- "busca esa fecha<br/>o la hábil anterior" --> HIST
+  HIST -- "Compra en esa fecha" --> RES["exchange_rate_resolved_date<br/>+ exchange_rate_value"]
+  RES -- "salario_usd x tasa" --> LPS["payroll.line.base_salary (L.)"]
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Flujos de aprobación</h2>
+    <p class="section-note">Dos patrones distintos conviven en el módulo.</p>
+
+    <div class="diagram-card">
+      <h3><span class="num">01</span> Contratación — solicitud (status general) + candidato</h3>
+      <p class="caption">Jefe solicita → Socio aprueba la vacante → RRHH busca. La solicitud pasa
+        sola a "Contratada" al contratar el primer candidato; el candidato sigue hasta "Finalizado",
+        donde se crea el perfil del empleado.</p>
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+stateDiagram-v2
+  state "hiring.request" as R {
+    [*] --> Borrador
+    Borrador --> Pendiente: Jefe envía a aprobación
+    Pendiente --> Aprobada: Socio aprueba
+    Aprobada --> EnBusqueda: RRHH inicia búsqueda
+    EnBusqueda --> Contratada: 1er candidato contratado (automático)
+    Pendiente --> Anulada
+    Aprobada --> Anulada
+    EnBusqueda --> Anulada
+    Contratada --> [*]
+  }
+  state "hiring.candidate" as C {
+    [*] --> Propuesto
+    Propuesto --> Filtrado: RRHH filtra
+    Filtrado --> Entrevistado: RRHH marca entrevistado
+    Entrevistado --> Aprobado: RRHH aprueba
+    Aprobado --> Contratado: RRHH marca contratado
+    Contratado --> Finalizado: RRHH llena info privada + docs y crea el perfil
+    Finalizado --> [*]
+  }
+        </pre>
+      </div>
+    </div>
+
+    <div class="diagram-card">
+      <h3><span class="num">02</span> Permisos laborales y horas extra — mismo patrón de 2 pasos</h3>
+      <p class="caption">Usado igual en <code>labor.permission</code> y <code>employee.overtime</code>: el Jefe da el primer visto bueno, RRHH cierra.</p>
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+stateDiagram-v2
+  [*] --> Solicitado: Empleado solicita
+  Solicitado --> AprobadoJefe: Jefe aprueba
+  Solicitado --> Rechazado: Jefe rechaza
+  AprobadoJefe --> Aprobado: RRHH aprueba
+  AprobadoJefe --> Rechazado: RRHH rechaza
+  Aprobado --> [*]
+  Rechazado --> [*]
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Organigrama y roles</h2>
+    <div class="diagram-card">
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph TD
+  subgraph Organigrama["Organigrama (Empresa Energía)"]
+    G["Roberto Salinas — Gerente General"] --> J["Carlos Méndez — Jefe de Depto. Ventas"]
+    J --> E["Laura Gómez — Vendedor"]
+    J --> E2["Diego Fernandez — Vendedor"]
+  end
+  subgraph Roles["Grupos del sistema"]
+    R1["Empleado"]
+    R2["Jefe de Departamento"]
+    R3["Especialista RRHH"]
+    R4["Dueño / Socio"]
+    R5["Administrador"]
+  end
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quién ve qué</h2>
+    <p class="section-note">Matriz de visibilidad sobre datos de compensación (salario, horas extra, saldo de vacaciones).</p>
+    <div class="table-shell">
+      <table>
+        <thead>
+          <tr><th>Rol</th><th>Compensación y Beneficios</th><th>Aprobar contratación</th><th>Aprobar permisos / horas extra</th><th>Editar candidatos</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Empleado</td><td><span class="dot no"></span>No</td><td><span class="dot no"></span>No</td><td><span class="dot no"></span>No</td><td><span class="dot no"></span>No</td></tr>
+          <tr><td>Jefe de Departamento</td><td><span class="dot no"></span>No</td><td><span class="dot no"></span>No</td><td><span class="dot partial"></span>1er paso</td><td><span class="dot no"></span>Solo lectura</td></tr>
+          <tr><td>Especialista RRHH</td><td><span class="dot yes"></span>Sí, completo</td><td><span class="dot no"></span>No</td><td><span class="dot partial"></span>2do paso</td><td><span class="dot yes"></span>Sí</td></tr>
+          <tr><td>Dueño / Socio</td><td><span class="dot yes"></span>Sí, lectura</td><td><span class="dot yes"></span>Sí</td><td><span class="dot no"></span>No</td><td><span class="dot no"></span>Solo lectura</td></tr>
+          <tr><td>Administrador</td><td><span class="dot yes"></span>Sí, total</td><td><span class="dot yes"></span>Sí</td><td><span class="dot yes"></span>Sí</td><td><span class="dot yes"></span>Sí</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Gestión de permisos</h2>
+    <p class="section-note">Antes había que ir a Ajustes → Usuarios y Compañías → Grupos, una pantalla genérica de Odoo
+      poco orientada a RRHH. Ahora un Especialista RRHH asigna roles directamente desde la ficha del empleado.</p>
+    <div class="diagram-card">
+      <h3><span class="num">→</span> Flujo del wizard "Permisos RRHH"</h3>
+      <p class="caption">Botón nuevo en la ficha del empleado (visible solo para Especialista RRHH), junto a los
+        stat-buttons de Salario, Vacaciones y Horas Extra.</p>
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph LR
+  A["Ficha del empleado"] -- "clic en 'Permisos RRHH'" --> B["Wizard: 4 checkboxes<br/>(Empleado / Jefe / Especialista / Socio)"]
+  B -- "Guardar permisos" --> C["res.users.groups_id<br/>(actualizado con sudo() controlado,<br/>sin exponer el modelo completo)"]
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Usuarios de prueba</h2>
+    <div class="table-shell">
+      <table>
+        <thead><tr><th>Usuario</th><th>Login</th><th>Contraseña</th><th>Rol</th></tr></thead>
+        <tbody>
+          <tr><td>Carlos Méndez</td><td><span class="cred">carlos.mendez@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Jefe de Departamento (Ventas)</td></tr>
+          <tr><td>Ana Ríos</td><td><span class="cred">ana.rios@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Dueño / Socio</td></tr>
+          <tr><td>Laura Gómez</td><td><span class="cred">laura.gomez@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Empleado (Vendedor)</td></tr>
+          <tr><td>Diego Fernandez</td><td><span class="cred">diego.fernandez@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Empleado (Vendedor) — reporta a Carlos Méndez</td></tr>
+          <tr><td>Jason Torres</td><td><span class="cred">jtorres@grupoelectric.com</span></td><td><span class="cred">Test1234!</span></td><td>Especialista RRHH (vinculado también al empleado "Jason" en Empresa Energía)</td></tr>
+          <tr><td>Roberto Salinas</td><td><span class="cred">roberto.salinas@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Gerente General (sin grupo RRHH)</td></tr>
+          <tr><td>Administrador</td><td><span class="cred">admin@empresaenergia.test</span></td><td><span class="cred">Test1234!</span></td><td>Administración total, 3 empresas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Bugs reales encontrados y corregidos</h2>
+    <p class="section-note">Todos aparecieron probando el flujo en vivo con distintos roles, no en revisión de código.</p>
+    <div class="bug-grid">
+      <div class="bug-card">
+        <h4>Botón "Cancelar" invertido</h4>
+        <p>En borrador, "Cancelar" enviaba la solicitud en vez de descartarla. Se excluyó el estado borrador de esa acción.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Aprobador vacío entre empresas</h4>
+        <p><code>env.user.employee_id</code> resolvía según la empresa activa de sesión, no la del registro. Se creó un helper que busca por empresa explícita.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Jefe sin acceso al crear documentos</h4>
+        <p>Al aprobar un candidato, la creación automática de <code>hr.employee</code> y documentos fallaba por permisos. Se aplicó <code>sudo()</code> por ser una automatización del sistema.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Regla "solo mis registros" filtrada a otros roles</h4>
+        <p>Jefe y Especialista heredaban el grupo Empleado, así que la regla de permisos propios los limitaba también a ellos. Se quitó la herencia entre grupos.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Vista cacheada en el navegador</h4>
+        <p>Actualizar el módulo no bastaba: el navegador guardaba la vista/JS vieja. Aprendizaje que se repitió esta sesión — recargar forzando caché (Ctrl+Shift+R) tras cada actualización.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Cambios de Python no se reflejaban tras <code>-u</code></h4>
+        <p>El proceso web principal no reimporta los <code>.py</code> al actualizar el módulo por línea de comandos — hace falta <code>docker restart rrhh_odoo_web</code> además de la actualización. Costó varios ciclos de debugging con el dominio dependiente de Departamento/Puesto.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Empresa incorrecta por sesión activa</h4>
+        <p>Los registros nuevos tomaban la empresa activa del usuario logueado, no la del empleado (ej. una asignación de Laura quedó en Sunergy). Se sincroniza automáticamente al elegir empleado.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Cálculo de saldo roto por permisos cruzados</h4>
+        <p>El saldo de vacaciones consultaba <code>labor.permission</code> internamente; un Socio sin acceso a ese modelo no podía ni ver su propia pestaña. Se aplicó <code>sudo()</code> al cálculo interno.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Menús sin restricción de grupo</h4>
+        <p>Ningún <code>&lt;menuitem&gt;</code> tenía <code>groups=""</code>: cualquier usuario interno veía los 8 menús de RRHH aunque no tuviera ningún rol. Se agregó <code>groups</code> a cada uno según quién tiene ACL sobre ese modelo.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Empleado sin ACL sobre su propio salario y documentos</h4>
+        <p><code>employee.salary</code> tenía una record rule "el empleado solo ve el suyo" pero ningún permiso base para el grupo Empleado — la regla nunca se evaluaba. Igual pasaba con <code>employee.document.request</code>. Se agregaron ambas filas de ACL (solo lectura) más la record rule que faltaba para documentos.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Adjunto de permiso laboral con nombre de archivo roto</h4>
+        <p><code>&lt;field name="attachment" filename="'Adjunto'" /&gt;</code> apuntaba a un campo inexistente en vez de a un Char literal. Se agregó el campo <code>attachment_filename</code>.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Fechas de permiso sin validar</h4>
+        <p>Se podía guardar un permiso laboral con fecha de fin anterior a la de inicio, dejando <code>days_count</code> en negativo. Se agregó una validación (<code>@api.constrains</code>).</p>
+      </div>
+      <div class="bug-card">
+        <h4>Datos precargados heredaban la empresa activa</h4>
+        <p>Al cargar los 13 departamentos y 105 puestos por XML sin especificar <code>company_id</code>, Odoo aplicó su default (empresa activa al momento de instalar) en vez de dejarlos disponibles para las 3. Se corrigió con <code>eval="False"</code> explícito en el dato, más una corrección puntual en base para los 118 registros ya creados.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Puesto no se filtraba por Departamento</h4>
+        <p>El dominio de <code>job_profile_id</code> solo filtraba por empresa; al elegir un Departamento, la lista de Puestos seguía mostrando los de todos los departamentos. Se agregó el filtro por <code>department_id</code> más un <code>onchange</code> que limpia el puesto si cambia el departamento.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Campo "Empleado" clicable disparaba guardado accidental</h4>
+        <p>En Permisos Laborales, aunque el campo era de solo lectura, seguía siendo un link navegable — un clic intentaba abrir la ficha del empleado y forzaba el guardado del formulario a medio llenar. Se agregó <code>options="{'no_open': True}"</code>.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Stat-button de Horas Extra sin contador real</h4>
+        <p>El botón en la ficha del empleado mostraba solo texto estático, no la cantidad real de registros. Se agregó un campo calculado y el widget <code>statinfo</code>.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Menú "Permisos" apuntaba a una acción inexistente</h4>
+        <p>El menú nuevo usaba <code>action="hr.action_hr_employee"</code>, un xmlid que no existe en Odoo 18. Esto <strong>impedía instalar/actualizar el módulo entero</strong>. Corregido a <code>hr.open_view_employee_list</code>.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Salario actual mostraba el nombre del empleado, no el monto</h4>
+        <p>El stat-button "Salario" mostraba literalmente el nombre del empleado, porque <code>employee.salary</code> usa <code>_rec_name = 'employee_id'</code>. Se agregó un <code>display_name</code> calculado con el monto formateado.</p>
+      </div>
+      <div class="bug-card">
+        <h4>Montos sin símbolo de moneda en formulario y horas extra</h4>
+        <p>El formulario de Salario Individual no mostraba el símbolo "L" porque <code>currency_id</code> solo se cargaba con multi-moneda activada. Se agregó en ambos modelos/vistas afectados.</p>
+      </div>
+      <div class="bug-card">
+        <h4>"Salario LPS" no convertía en el ambiente de prueba</h4>
+        <p><code>employee.salary</code> convertía USD→LPS con <code>res.currency._convert()</code> (tabla genérica <code>res.currency.rate</code>), vacía en <code>odoo18_prueba</code> porque el <code>post_init_hook</code> solo la siembra en instalación limpia, no en <code>-u</code>. Resultado: factor 1,0 (700 USD → 700 LPS). Se cambió a resolver la tasa desde <code>hr.exchange.rate.history</code> (Banco Central), la misma fuente que Planilla. <code>version 18.0.1.0.4</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rutina de verificación operativa</h2>
+    <p class="section-note">Se consolidó en 3 pasos después de repetir el mismo problema varias veces esta sesión.</p>
+    <div class="diagram-card">
+      <div class="mermaid-shell">
+        <pre class="mermaid">
+graph LR
+  A["1. Editar modelo/vista"] --> B["2. docker exec ... odoo -u odoo_rrhh_custom --stop-after-init"]
+  B --> C{"¿Se tocó un .py?"}
+  C -- "sí" --> D["docker restart rrhh_odoo_web"]
+  C -- "no (solo XML/data)" --> E["Alcanza con el paso 2"]
+  D --> F["3. Ctrl+Shift+R en el navegador"]
+  E --> F
+        </pre>
+      </div>
+    </div>
+    <p class="section-note">También se usó <code>odoo shell</code> dentro del contenedor para correcciones puntuales de datos
+      (reasignar solicitudes antes de borrar un registro, forzar el recálculo de un saldo de vacaciones ya creado con 0 días,
+      vincular un usuario a su ficha de empleado) — siempre priorizando el ORM sobre SQL directo cuando había reglas de
+      negocio de por medio, y usando SQL solo para verificación o cuando el propio modelo bloqueaba la escritura por estado.</p>
+  </section>
+
+  <footer>
+    <span>odoo_rrhh_custom · Odoo 18 · Docker</span>
+    <span>Plan de Planillas: <a href="https://claude.ai/code/artifact/1746adcb-4c2c-4dd7-bf92-841908543b10">Planilla Multiempresa</a> · motor de cálculo en curso</span>
+  </footer>
+
+</div>

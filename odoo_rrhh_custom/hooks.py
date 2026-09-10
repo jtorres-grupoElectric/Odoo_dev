@@ -30,9 +30,10 @@ def _load_exchange_rate_history(env):
 def _update_hnl_current_rate(env):
     """Actualiza la tasa 'manual' genérica de Odoo (Ajustes > Monedas) para
     Lempiras con el último valor (Compra) del histórico recién cargado, en
-    vez de dejar el dato de fábrica de 2010. Solo la usan cálculos fuera de
-    Planilla (ej. 'Salario neto USD' en la ficha del empleado); Planilla
-    resuelve su propia tasa por periodo desde hr.exchange.rate.history."""
+    vez de dejar el dato de fábrica de 2010. Tanto Planilla como la ficha de
+    Salario individual resuelven su propia tasa por periodo desde
+    hr.exchange.rate.history; esto solo cubre conversiones genéricas de Odoo
+    fuera del módulo."""
     hnl = env['res.currency'].search([('name', '=', 'HNL')], limit=1)
     latest = env['hr.exchange.rate.history'].search([], order='date desc', limit=1)
     if not hnl or not latest:

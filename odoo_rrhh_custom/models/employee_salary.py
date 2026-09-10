@@ -15,8 +15,9 @@ class EmployeeSalary(models.Model):
     base_salary = fields.Float(string='Salario en USD', required=True)
     base_salary_lps = fields.Float(
         string='Salario LPS', compute='_compute_base_salary_lps',
-        help='Salario en USD convertido a Lempiras con la tasa de cambio vigente '
-             '(tabla de tasas de res.currency) a la fecha efectiva del salario.')
+        help='Salario en USD convertido a Lempiras con la tasa de compra del Banco '
+             'Central de Honduras (hr.exchange.rate.history) vigente a la fecha '
+             'efectiva del salario — la misma fuente que usa Planilla.')
     currency_id = fields.Many2one(
         'res.currency', string='Moneda',
         default=lambda self: self.env.company.currency_id)
@@ -36,38 +37,36 @@ class EmployeeSalary(models.Model):
         string='Salario neto USD', compute='_compute_net_salary_usd', store=True)
     notes = fields.Text(string='Notas')
 
-    def _get_conversion_context(self):
+    def _get_conversion_date(self):
         self.ensure_one()
-        company = self.company_id or self.env.company
-        date = self.effective_date or fields.Date.context_today(self)
-        return company, date
+        return self.effective_date or fields.Date.context_today(self)
 
-    @api.depends('base_salary', 'effective_date', 'company_id')
+    def _get_usd_buy_rate(self):
+        """Tasa de compra USD→Lempira del Banco Central vigente a la fecha
+        efectiva del salario. Misma fuente que usa Planilla
+        (hr.exchange.rate.history), no la tabla genérica de Odoo
+        (res.currency.rate), que nadie mantiene actualizada."""
+        self.ensure_one()
+        History = self.env['hr.exchange.rate.history'].sudo()
+        _resolved_date, rate = History.get_buy_rate_on_or_before(self._get_conversion_date())
+        return rate
+
+    @api.depends('base_salary', 'effective_date')
     def _compute_base_salary_lps(self):
-        usd = self.env.ref('base.USD')
         for salary in self:
-            company, date = salary._get_conversion_context()
-            if not salary.base_salary or not company.currency_id:
-                salary.base_salary_lps = 0.0
-                continue
-            salary.base_salary_lps = usd._convert(
-                salary.base_salary, company.currency_id, company, date)
+            rate = salary._get_usd_buy_rate()
+            salary.base_salary_lps = (salary.base_salary or 0.0) * rate
 
     @api.depends('base_salary_lps', 'bonus')
     def _compute_net_salary_lps(self):
         for salary in self:
             salary.net_salary_lps = salary.base_salary_lps + salary.bonus
 
-    @api.depends('net_salary_lps', 'effective_date', 'company_id')
+    @api.depends('net_salary_lps', 'effective_date')
     def _compute_net_salary_usd(self):
-        usd = self.env.ref('base.USD')
         for salary in self:
-            company, date = salary._get_conversion_context()
-            if not salary.net_salary_lps or not company.currency_id:
-                salary.net_salary_usd = 0.0
-                continue
-            salary.net_salary_usd = company.currency_id._convert(
-                salary.net_salary_lps, usd, company, date)
+            rate = salary._get_usd_buy_rate()
+            salary.net_salary_usd = (salary.net_salary_lps / rate) if rate else 0.0
 
     @api.depends('net_salary_usd', 'effective_date')
     def _compute_display_name(self):
