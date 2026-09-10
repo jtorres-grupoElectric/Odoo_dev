@@ -60,6 +60,47 @@
         <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
     </record>
 
+    <!-- ================================================================
+         Roles por apartado. Son grupos INDEPENDIENTES (sin jerarquía entre
+         sí), así que en el formulario del usuario aparecen como casillas
+         que se marcan/desmarcan por separado. Cada uno habilita SOLO el
+         menú de su apartado y las ACL de sus modelos. Los botones de flujo
+         sensibles (aprobar, finalizar, anular) siguen reservados a
+         Especialista / Jefe / Socio según ya estaba.
+         Todos implican "Oficial de RRHH" (hr.group_hr_user) porque cualquier
+         apartado de RRHH termina leyendo la ficha del empleado.
+         ================================================================ -->
+
+    <record id="group_rrhh_contratacion" model="res.groups">
+        <field name="name">Contratación</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="group_rrhh_salarios" model="res.groups">
+        <field name="name">Salarios</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="group_rrhh_horas_extra" model="res.groups">
+        <field name="name">Horas Extra</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="group_rrhh_feriados" model="res.groups">
+        <field name="name">Feriados</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
+    <record id="group_rrhh_permisos" model="res.groups">
+        <field name="name">Permisos Laborales</field>
+        <field name="category_id" ref="module_category_rrhh_custom"/>
+        <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+    </record>
+
     <!-- El administrador del sistema (grupo "Ajustes") recibe automáticamente
          "Especialista RRHH", que ya tiene acceso completo a todos los modelos
          del módulo y aparece en todos los menús. Así el admin ve y gestiona

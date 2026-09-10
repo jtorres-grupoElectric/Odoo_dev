@@ -145,6 +145,6 @@
     <menuitem id="menu_rrhh_custom_root" name="RRHH" sequence="10"/>
     <menuitem id="menu_hiring_request" name="Solicitud de Contratación"
               parent="menu_rrhh_custom_root" action="action_hiring_request" sequence="10"
-              groups="odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_especialista"/>
+              groups="odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_contratacion"/>
 
 </odoo>

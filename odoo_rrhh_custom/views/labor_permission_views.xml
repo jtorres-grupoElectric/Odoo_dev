@@ -113,6 +113,6 @@
 
     <menuitem id="menu_labor_permission" name="Permisos Laborales"
               parent="menu_rrhh_custom_root" action="action_labor_permission" sequence="50"
-              groups="odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista"/>
+              groups="odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_permisos"/>
 
 </odoo>

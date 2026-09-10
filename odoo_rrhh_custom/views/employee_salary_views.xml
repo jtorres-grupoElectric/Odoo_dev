@@ -83,6 +83,6 @@
 
     <menuitem id="menu_employee_salary" name="Salarios"
               parent="menu_rrhh_custom_root" action="action_employee_salary" sequence="40"
-              groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_empleado"/>
+              groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_salarios"/>
 
 </odoo>

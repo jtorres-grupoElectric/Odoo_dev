@@ -112,6 +112,6 @@
 
     <menuitem id="menu_employee_overtime" name="Horas Extra"
               parent="menu_rrhh_custom_root" action="action_employee_overtime" sequence="45"
-              groups="odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio"/>
+              groups="odoo_rrhh_custom.group_rrhh_empleado,odoo_rrhh_custom.group_rrhh_jefe_departamento,odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_socio,odoo_rrhh_custom.group_rrhh_horas_extra"/>
 
 </odoo>

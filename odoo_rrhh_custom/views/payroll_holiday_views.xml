@@ -44,7 +44,7 @@
 
     <menuitem id="menu_payroll_holiday" name="Feriados"
               parent="menu_rrhh_custom_root" action="action_payroll_holiday" sequence="46"
-              groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+              groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_feriados"/>
 
     <record id="view_payroll_holiday_worked_list" model="ir.ui.view">
         <field name="name">payroll.holiday.worked.list</field>
@@ -73,6 +73,6 @@
 
     <menuitem id="menu_payroll_holiday_worked" name="Feriados trabajados"
               parent="menu_rrhh_custom_root" action="action_payroll_holiday_worked" sequence="47"
-              groups="odoo_rrhh_custom.group_rrhh_especialista"/>
+              groups="odoo_rrhh_custom.group_rrhh_especialista,odoo_rrhh_custom.group_rrhh_feriados"/>
 
 </odoo>
